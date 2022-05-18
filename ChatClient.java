@@ -17,10 +17,17 @@ public class ChatClient {
     private final Runnable readFromSocket;
     private final Runnable readFromConsole;
 
+    private final TextWriter textWriter;
+    private final String userName;
+
     public ChatClient(String host, int port, String name) throws IOException {
         var socket = new Socket(host, port);
+
+        textWriter = new TextWriter(socket);
+        this.userName = name;
+
         readFromSocket = () -> new TextReader(socket, log::info, () -> Sockets.close(socket)).read();
-        readFromConsole = () -> new TextReader(System.in, text -> new TextWriter(socket).write(name + ": " + text)).read();
+        readFromConsole = () -> new TextReader(System.in, text -> textWriter.write(text)).read();
     }
 
     private void start() {
@@ -28,11 +35,18 @@ public class ChatClient {
         var consoleReader = new Thread(readFromConsole);
         consoleReader.setDaemon(true);
         consoleReader.start();
+
+        textWriter.write("event:USER_JOINED_CHAT:" + userName);
     }
 
     public static void main(String[] args) throws IOException {
-        var port = Sockets.parsePort(args[1], DEFAULT_PORT);
-        new ChatClient(args[0], port, UUID.randomUUID().toString()).start();
+        var hostName = args[0];
+        var rawPort = args[1];
+        var userName = args[2];
+
+        ChatClient chatClient = new ChatClient(hostName, Sockets.parsePort(rawPort, DEFAULT_PORT), userName);
+
+        chatClient.start();
     }
 
 }
