@@ -1,22 +1,20 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat;
 
 import lombok.SneakyThrows;
-import pl.training.concurrency.ex011_chat_v2.commons.TextReader;
-import pl.training.concurrency.ex011_chat_v2.commons.TextWriter;
+import concurency.chat.commons.TextReader;
+import concurency.chat.commons.TextWriter;
 
 import java.net.Socket;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
-import static pl.training.concurrency.ex011_chat_v2.ServerEventType.CONNECTION_CLOSED;
-import static pl.training.concurrency.ex011_chat_v2.ServerEventType.MESSAGE_RECEIVED;
+import static concurency.chat.ServerEventType.*;
 
 class Worker implements Runnable {
 
     private final Socket socket;
     private final EventsBus eventsBus;
     private final TextWriter writer;
-    private CompletableFuture<String> name;
+    private final CompletableFuture<String> name;
 
     Worker(Socket socket, EventsBus eventsBus) {
         this.socket = socket;
@@ -34,6 +32,10 @@ class Worker implements Runnable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name.complete(name);
+    }
+
     private void onText(String text) {
         handleMessage(text);
     }
@@ -41,18 +43,13 @@ class Worker implements Runnable {
     @SneakyThrows
     private void handleMessage(String text) {
         if (text.startsWith("event:")) {
-            handleSpecialMessage(text.split(":", 2)[1]);
+            eventsBus.publish(ServerEvent.builder()
+                    .type(SPECIAL_MESSAGE_RECEIVED)
+                    .payload(text)
+                    .source(this)
+                    .build());
         } else {
             publishMessage(name.get() + ": " + text);
-        }
-    }
-
-    private void handleSpecialMessage(String text) {
-        name.complete(text.split(":")[1]);
-        try {
-            publishMessage(name.get() + " joined the chat");
-        } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
         }
     }
 

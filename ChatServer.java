@@ -1,17 +1,13 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat;
 
 import lombok.RequiredArgsConstructor;
-import pl.training.concurrency.ex011_chat_v2.commons.Sockets;
+import concurency.chat.commons.Sockets;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
 
-import static java.util.concurrent.Executors.newFixedThreadPool;
-import static pl.training.concurrency.ex011_chat_v2.ServerEventType.CONNECTION_ACCEPTED;
-import static pl.training.concurrency.ex011_chat_v2.ServerEventType.SERVER_STARTED;
+import static concurency.chat.ServerEventType.CONNECTION_ACCEPTED;
+import static concurency.chat.ServerEventType.SERVER_STARTED;
 
 @RequiredArgsConstructor
 public class ChatServer {
@@ -23,16 +19,28 @@ public class ChatServer {
 
     private final UserJoinHandler userJoinHandler;
 
+
     private void start(int port) throws IOException {
+        createHandlers();
         eventsBus.addConsumer(new ServerEventsProcessor(serverWorkers));
+
         try (var serverSocket = new ServerSocket(port)) {
             eventsBus.publish(ServerEvent.builder().type(SERVER_STARTED).build());
             while (true) {
                 var socket = serverSocket.accept();
-                eventsBus.publish(ServerEvent.builder().type(CONNECTION_ACCEPTED).build());
                 userJoinHandler.joinUser(socket);
+
+                eventsBus.publish(ServerEvent.builder().type(CONNECTION_ACCEPTED).build());
             }
         }
+    }
+
+    private void createHandlers() {
+        var specialMessageHandler = new SpecialMessageHandler(eventsBus);
+        eventsBus.addConsumer(specialMessageHandler);
+
+        var roomHandler = new RoomHandler(eventsBus);
+        eventsBus.addConsumer(roomHandler);
     }
 
     public static void main(String[] args) throws IOException {
@@ -44,6 +52,7 @@ public class ChatServer {
 
         var serviceWorkers = new SynchronizedServiceWorkers(new HashMapServerWorkers());
         var userJoinHandler = new UserJoinHandler(eventsBus, serviceWorkers);
+
         var server = new ChatServer(serviceWorkers, eventsBus, userJoinHandler);
 
         server.start(port);

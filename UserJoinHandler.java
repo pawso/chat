@@ -1,4 +1,4 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static concurency.chat.ServerEventType.USER_JOINED;
 
 @Log
 @RequiredArgsConstructor
@@ -20,8 +22,8 @@ public class UserJoinHandler {
     private final EventsBus eventsBus;
     private final ServerWorkers serverWorkers;
 
-    private ExecutorService joinerExecutor = Executors.newFixedThreadPool(JOINER_THREAD_CNT);
-    private ExecutorService userExecutor = Executors.newFixedThreadPool(USER_THREADS_COUNT);
+    private final ExecutorService joinerExecutor = Executors.newFixedThreadPool(JOINER_THREAD_CNT);
+    private final ExecutorService userExecutor = Executors.newFixedThreadPool(USER_THREADS_COUNT);
 
     public void joinUser(Socket socket) {
 
@@ -40,7 +42,10 @@ public class UserJoinHandler {
                     e.printStackTrace();
                 }
             }
-            serverWorkers.add(worker);
+            synchronized (this) {
+                serverWorkers.add(worker);
+                eventsBus.publish(ServerEvent.builder().type(USER_JOINED).build());
+            }
         });
     }
 }

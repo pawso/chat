@@ -1,13 +1,12 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat;
 
 import lombok.extern.java.Log;
-import pl.training.concurrency.ex011_chat_v2.commons.Sockets;
-import pl.training.concurrency.ex011_chat_v2.commons.TextReader;
-import pl.training.concurrency.ex011_chat_v2.commons.TextWriter;
+import concurency.chat.commons.Sockets;
+import concurency.chat.commons.TextReader;
+import concurency.chat.commons.TextWriter;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.UUID;
 
 @Log
 public class ChatClient {

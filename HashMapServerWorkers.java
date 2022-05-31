@@ -1,4 +1,4 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat;
 
 import java.util.HashMap;
 import java.util.Map;

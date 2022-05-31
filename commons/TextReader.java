@@ -1,4 +1,4 @@
-package pl.training.concurrency.ex011_chat_v2.commons;
+package concurency.chat.commons;
 
 import lombok.extern.java.Log;
 
