@@ -42,7 +42,7 @@ class Worker implements Runnable {
 
     @SneakyThrows
     private void handleMessage(String text) {
-        if (text.startsWith("event:")) {
+        if (Utils.isCommand(text)) {
             eventsBus.publish(ServerEvent.builder()
                     .type(SPECIAL_MESSAGE_RECEIVED)
                     .payload(text)

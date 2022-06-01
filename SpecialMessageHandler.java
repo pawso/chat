@@ -20,34 +20,43 @@ public class SpecialMessageHandler implements Consumer<ServerEvent> {
         }
     }
 
-    private void handleSpecialMessage(String text, Worker sender) {
-        if (text.contains("USER_JOINED_CHAT")) {
-            var name = text.split(":")[2];
+    private void handleSpecialMessage(String message, Worker sender) {
+
+        String commandArgs = Utils.stripCommand(message);
+
+        if (message.contains("USER_JOINED_CHAT")) {
+            var name = commandArgs;
             sender.setName(name);
             publishMessage(name + " joined the chat", sender);
-        } else if (text.contains("OPEN_ROOM")) {
+        } else if (message.contains("OPEN_PUBLIC_ROOM")) {
             eventsBus.publish(ServerEvent.builder()
-                    .type(ROOM_OPEN_REQUEST)
+                    .type(PUBLIC_ROOM_OPEN_REQUEST)
                     .source(sender)
-                    .payload(text)
+                    .payload(commandArgs)
                     .build());
-        } else if (text.contains("PUBLISH_TO_ROOM")) {
+        } else if (message.contains("OPEN_PRIVATE_ROOM")) {
+                eventsBus.publish(ServerEvent.builder()
+                        .type(PRIVATE_ROOM_OPEN_REQUEST)
+                        .source(sender)
+                        .payload(commandArgs)
+                        .build());
+        } else if (message.contains("PUBLISH_TO_ROOM")) {
             eventsBus.publish(ServerEvent.builder()
                     .type(PUBLISH_TO_ROOM)
                     .source(sender)
-                    .payload(text)
+                    .payload(commandArgs)
                     .build());
-        } else if (text.contains("ADD_USER_TO_ROOM")) {
+        } else if (message.contains("JOIN_ROOM") || message.contains("ADD_USER_TO_ROOM")) {
             eventsBus.publish(ServerEvent.builder()
-                    .type(ADD_USER_TO_ROOM)
+                    .type(JOIN_ROOM)
                     .source(sender)
-                    .payload(text)
+                    .payload(commandArgs)
                     .build());
-        } else if (text.contains("CLOSE_ROOM")) {
+        } else if (message.contains("CLOSE_ROOM")) {
             eventsBus.publish(ServerEvent.builder()
                     .type(CLOSE_ROOM_REQUEST)
                     .source(sender)
-                    .payload(text)
+                    .payload(commandArgs)
                     .build());
         }
     }

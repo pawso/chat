@@ -35,7 +35,7 @@ public class ChatClient {
         consoleReader.setDaemon(true);
         consoleReader.start();
 
-        textWriter.write("event:USER_JOINED_CHAT:" + userName);
+        textWriter.write("event:USER_JOINED_CHAT " + userName);
     }
 
     public static void main(String[] args) throws IOException {
