@@ -1,4 +1,4 @@
-package concurency.chat;
+package concurency.chat.server;
 
 public enum ServerEventType {
 
@@ -12,7 +12,12 @@ public enum ServerEventType {
     // Room actions
     PUBLIC_ROOM_OPEN_REQUEST,
     PRIVATE_ROOM_OPEN_REQUEST,
-    PUBLISH_TO_ROOM,
-    JOIN_ROOM,
-    CLOSE_ROOM_REQUEST
+    PUBLISH_TO_ROOM_REQUEST,
+    JOIN_ROOM_REQUEST,
+    CLOSE_ROOM_REQUEST,
+
+    // File transfer actions
+
+    SEND_FILE_REQUEST,
+    ACCEPT_FILE
 }

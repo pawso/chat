@@ -1,14 +1,17 @@
-package concurency.chat;
+package concurency.chat.server;
 
+import concurency.chat.commons.CommandUtils;
 import lombok.SneakyThrows;
 import concurency.chat.commons.TextReader;
 import concurency.chat.commons.TextWriter;
+import lombok.extern.java.Log;
 
 import java.net.Socket;
 import java.util.concurrent.CompletableFuture;
 
-import static concurency.chat.ServerEventType.*;
+import static concurency.chat.server.ServerEventType.*;
 
+@Log
 class Worker implements Runnable {
 
     private final Socket socket;
@@ -42,7 +45,7 @@ class Worker implements Runnable {
 
     @SneakyThrows
     private void handleMessage(String text) {
-        if (Utils.isCommand(text)) {
+        if (CommandUtils.isCommand(text)) {
             eventsBus.publish(ServerEvent.builder()
                     .type(SPECIAL_MESSAGE_RECEIVED)
                     .payload(text)
@@ -68,8 +71,12 @@ class Worker implements Runnable {
                 .build());
     }
 
-    void send(String text) {
+    void sendText(String text) {
         writer.write(text);
     }
 
+    void sendFile(byte[] data) {
+
+        // writer.write(data);
+    }
 }

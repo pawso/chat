@@ -1,7 +1,9 @@
 package concurency.chat.commons;
 
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;

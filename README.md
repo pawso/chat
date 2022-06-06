@@ -15,6 +15,10 @@ TODO:
     Implement utils, in order not to copy code to broadcast message
     Connect enum to string representation. Add message handler in enum (i.e. function which should be invoked in order to handle this message. Enum class?)
     Thread.sleep(HANDSHAKE_WAIT_SLEEP_INTERVAL_MS); - this is busy waiting
+    SpecialMessageHandler - rename to SpecialMessageConsumer
+
+    SpecialMessageHandler - change to UserSpecialRequestHandler. Events should be changed to requests. MessageHandler is implemented.
+    RoomHandler should be changed to RoomRequestHandler. Logic should be moved to MessageHandler. 
 
 -> Rooms:
     (DONE) ADD_USER_TO_ROOM - change this to JOIN_ROOM. It should be possible for every user to join each room. This will complete public room
@@ -24,9 +28,39 @@ TODO:
     Add broadcasted information about room opened/closed and if it is public or private
     (DONE) CLOSE_ROOM - only user creator should be able to invoke it.
     Add sending back to room members information about events in room (e.g. user joined, left)
-    (DONE) Handle cases in which the room already exisits / does not exist  
+    (DONE) Handle cases in which the room already exists / does not exist  
+
+-> File transfer
+    Users should be able to send files to broadcast file to all users in room
+    User should send even:SEND_FILE <room_name> <file_path>
+    Client side application should open server with new socket with given <socket_id>, which will be used to transmit file
+    Client side application should publish file to content to socket
+    Input message should be transformed to be of form event:SEND_FILE <room_name> <port>
+    Room should open connection to given socket and act as client to receive file
+    At the same time all room members should receive information that there is file to download. 
+    In case user confirms with command event:ACCEPT_FILE <file_name>, new thread should be created to receive file contents
+    (DONE - better not) Is there new socket needed? Better use the same one to transfer files and data
+    
+
+    This should have nothing to do with code handling rooms. Therefore, information about rooms in 
+    which user participated should be stored in user (aka Worker at this point).
+    It will be used in future to receive history anyway. 
+    Flow should be:
+        - sender sends file transfer request to receiver
+        - receiver needs to confirm if the file is accepted: yes / no
+        - yes answer should contain file location as well. 
+        - in case user accepts - file transfer starts (in new thread). In case user declines - nothing happens
+    Add history of rooms in users.
+    Add file transfer request handler. Initially it should provide layers for communication only
+    
+SEND_FILE room_name read_file_path socket_id
 
 Control messages:
+
+FT:
+    TODO:
+        event:SEND_FILE room_name read_file_path
+
 ROOMs:
     DONE:
     event:OPEN_ROOM <room name>

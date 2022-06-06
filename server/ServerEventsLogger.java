@@ -1,4 +1,4 @@
-package concurency.chat;
+package concurency.chat.server;
 
 import lombok.extern.java.Log;
 

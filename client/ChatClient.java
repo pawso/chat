@@ -1,9 +1,7 @@
-package concurency.chat;
+package concurency.chat.client;
 
+import concurency.chat.commons.*;
 import lombok.extern.java.Log;
-import concurency.chat.commons.Sockets;
-import concurency.chat.commons.TextReader;
-import concurency.chat.commons.TextWriter;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -25,8 +23,13 @@ public class ChatClient {
         textWriter = new TextWriter(socket);
         this.userName = name;
 
-        readFromSocket = () -> new TextReader(socket, log::info, () -> Sockets.close(socket)).read();
-        readFromConsole = () -> new TextReader(System.in, text -> textWriter.write(text)).read();
+
+        FileTransferHandler fileTransferHandler = new FileTransferHandler(name);
+        ClientMessageConsumer incomingMessageConsumer = new ClientMessageConsumer(fileTransferHandler, log::info);
+        ClientMessageConsumer outcomingMessageConsumer = new ClientMessageConsumer(fileTransferHandler, textWriter::write);
+
+        readFromSocket = () -> new TextReader(socket, incomingMessageConsumer, () -> Sockets.close(socket)).read();
+        readFromConsole = () -> new TextReader(System.in, outcomingMessageConsumer).read();
     }
 
     private void start() {
@@ -36,6 +39,8 @@ public class ChatClient {
         consoleReader.start();
 
         textWriter.write("event:USER_JOINED_CHAT " + userName);
+        textWriter.write("event:OPEN_PUBLIC_ROOM wedkarze");
+        // textWriter.write("event:SEND_FILE wedkarze C:\\Users\\soker\\Desktop\\Bugsnag.dll");
     }
 
     public static void main(String[] args) throws IOException {

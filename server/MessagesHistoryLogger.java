@@ -1,9 +1,9 @@
-package concurency.chat;
+package concurency.chat.server;
 
 import lombok.extern.java.Log;
 
 import java.util.function.Consumer;
-import static concurency.chat.ServerEventType.MESSAGE_RECEIVED;
+import static concurency.chat.server.ServerEventType.MESSAGE_RECEIVED;
 
 @Log
 class MessagesHistoryLogger implements Consumer<ServerEvent> {

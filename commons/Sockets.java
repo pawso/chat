@@ -6,7 +6,7 @@ import java.net.Socket;
 public class Sockets {
 
     private static final int MIN_PORT_NUMBER = 80;
-    private static final int MAX_PORT_NUMBER = 9000;
+    private static final int MAX_PORT_NUMBER = 90000;
 
     private Sockets() {
     }

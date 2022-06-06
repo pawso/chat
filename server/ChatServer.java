@@ -1,4 +1,4 @@
-package concurency.chat;
+package concurency.chat.server;
 
 import lombok.RequiredArgsConstructor;
 import concurency.chat.commons.Sockets;
@@ -6,8 +6,8 @@ import concurency.chat.commons.Sockets;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import static concurency.chat.ServerEventType.CONNECTION_ACCEPTED;
-import static concurency.chat.ServerEventType.SERVER_STARTED;
+import static concurency.chat.server.ServerEventType.CONNECTION_ACCEPTED;
+import static concurency.chat.server.ServerEventType.SERVER_STARTED;
 
 @RequiredArgsConstructor
 public class ChatServer {
@@ -36,11 +36,18 @@ public class ChatServer {
     }
 
     private void createHandlers() {
-        var specialMessageHandler = new SpecialMessageHandler(eventsBus);
+        var specialMessageHandler = new SpecialMessageHandler(eventsBus, new RoomSpecialMessageHandler(eventsBus), new FileTransferSpecialMessageHandler(eventsBus));
         eventsBus.addConsumer(specialMessageHandler);
 
-        var roomHandler = new RoomHandler(eventsBus);
-        eventsBus.addConsumer(roomHandler);
+        var roomCollection = new RoomsMapCollection();
+
+        var roomRequestHandler = new RoomRequestHandler(roomCollection, eventsBus);
+        var roomRequestConsumer = new RoomRequestEventConsumer(roomRequestHandler);
+        eventsBus.addConsumer(roomRequestConsumer);
+
+        var fileTransferRequestHandler = new FileTransferRequestHandler(eventsBus, roomCollection);
+        var fileTransferConsumer = new FileTransferRequestConsumer(fileTransferRequestHandler);
+        eventsBus.addConsumer(fileTransferConsumer);
     }
 
     public static void main(String[] args) throws IOException {
