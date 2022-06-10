@@ -48,6 +48,11 @@ public class ChatServer {
         var fileTransferRequestHandler = new FileTransferRequestHandler(eventsBus, roomCollection);
         var fileTransferConsumer = new FileTransferRequestConsumer(fileTransferRequestHandler);
         eventsBus.addConsumer(fileTransferConsumer);
+
+        LogMessageCreator logMessageCreator = new LogMessageCreator();
+        LogFileWriter logFileWriter = new LogFileWriter("C:\\Users\\soker\\work\\dev-pro\\project1a\\chat");
+        LogWriteMessageConsumer logWriterMessageConsumer = new LogWriteMessageConsumer(logMessageCreator, logFileWriter);
+        eventsBus.addConsumer(logWriterMessageConsumer);
     }
 
     public static void main(String[] args) throws IOException {

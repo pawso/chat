@@ -19,5 +19,8 @@ public enum ServerEventType {
     // File transfer actions
 
     SEND_FILE_REQUEST,
-    ACCEPT_FILE
+    ACCEPT_FILE,
+
+    LOG_WRITE_MESSAGE,
+    LOG_READ_MESSAGE
 }

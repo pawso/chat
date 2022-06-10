@@ -31,15 +31,23 @@ TODO:
     (DONE) Handle cases in which the room already exists / does not exist  
 
 -> File transfer
-    Users should be able to send files to broadcast file to all users in room
-    User should send even:SEND_FILE <room_name> <file_path>
-    Client side application should open server with new socket with given <socket_id>, which will be used to transmit file
-    Client side application should publish file to content to socket
-    Input message should be transformed to be of form event:SEND_FILE <room_name> <port>
-    Room should open connection to given socket and act as client to receive file
-    At the same time all room members should receive information that there is file to download. 
-    In case user confirms with command event:ACCEPT_FILE <file_name>, new thread should be created to receive file contents
+    (DONE) Users should be able to send files to broadcast file to all users in room
+    (DONE)     User should send even:SEND_FILE <room_name> <file_path>
+    (DONE) Client side application should open server with new socket with given <socket_id>, which will be used to transmit file
+    (DONE) Client side application should publish file to content to socket
+    (DONE) Input message should be transformed to be of form event:SEND_FILE <room_name> <port>
+    (DONE) Room should open connection to given socket and act as client to receive file
+    At the same time all room members should receive information that there is file to download.
+    (ABANDONED FOR IT WAS TOO COMPLICATED )In case user confirms with command event:ACCEPT_FILE <file_name>, new thread should be created to receive file contents
     (DONE - better not) Is there new socket needed? Better use the same one to transfer files and data
+
+-> Logging
+    New consumer should be added to handle message LOG_MESSAGE created for logging and perhaps others (e.g. WRITE_TO_ROOM)
+    Consumer should create file and write messages - previously decorate it with timestamp
+    Composition! So the writer can be exchanged later, for instance not to write to flat file, but some other messages sink
+    Users should store which rooms there were in. Initially user should be able to fetch all history, optional feature is only during time where user was in room. 
+    FETCH_HISTORY - should be consumed by the same consumer. This means that we should be able not only to write to the file, but also read. 
+    Read log should be concluded with PUBLISH_HISTORY message publishes, with log as payload. It should be consumed by dedicated consumer, who should have access to collection of users. Only requester should be sent 
     
 
     This should have nothing to do with code handling rooms. Therefore, information about rooms in 

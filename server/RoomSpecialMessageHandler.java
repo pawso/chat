@@ -67,6 +67,12 @@ public class RoomSpecialMessageHandler extends MessageHandler {
                     .source(sender)
                     .payload(commandArgs)
                     .build());
+        } else if (message.contains("READ_LOG")) {
+            eventsBus.publish(ServerEvent.builder()
+                    .type(LOG_READ_MESSAGE)
+                    .source(sender)
+                    .payload(commandArgs)
+                    .build());
         }
 
         return true;
