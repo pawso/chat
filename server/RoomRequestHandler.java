@@ -12,7 +12,7 @@ public class RoomRequestHandler {
         if (rooms.roomExists(roomName)) {
             source.sendText(String.format("Room %s already exists", roomName));
         }
-        Room room = new Room(roomName, source, isPublic);
+        Room room = new Room(roomName, source, isPublic, eventsBus);
         room.addUser(source);
         rooms.addRoom(roomName, room);
     }

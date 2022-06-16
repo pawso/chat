@@ -21,7 +21,8 @@ public class RoomSpecialMessageHandler extends MessageHandler {
             "PUBLISH_TO_ROOM",
             "JOIN_ROOM",
             "ADD_USER_TO_ROOM",
-            "CLOSE_ROOM"
+            "CLOSE_ROOM",
+            "READ_LOG"
     );
 
     @Override

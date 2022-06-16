@@ -9,6 +9,7 @@ public class LogWriteMessageConsumer implements Consumer<ServerEvent> {
 
     final LogMessageCreator logMessageCreator;
     final LogFileWriter logFileWriter;
+    final RoomsMapCollection rooms;
 
     @Override
     public void accept(ServerEvent event) {
@@ -19,8 +20,15 @@ public class LogWriteMessageConsumer implements Consumer<ServerEvent> {
     }
 
     private void handleReadMessage(Worker requestor, String payload) {
-        String roomName = "wedkarze";
-        String log = logFileWriter.read();
-        requestor.sendText(log);
+        String msg = "";
+        Room room = rooms.getRoom(payload);
+        if (room == null) {
+            msg = "This room does not exist: " + payload;
+        } else if (!room.containsMember(requestor)) {
+            msg = "You are not entitled to get history for this room: " + payload;
+        } else {
+            msg = logFileWriter.readRoomHistory(payload);
+        }
+        requestor.sendText(msg);
     }
 }

@@ -53,6 +53,11 @@ class Worker implements Runnable {
                     .build());
         } else {
             publishMessage(name.get() + ": " + text);
+            eventsBus.publish(ServerEvent.builder()
+                    .type(LOG_WRITE_MESSAGE)
+                    .payload(text)
+                    .source(this)
+                    .build());
         }
     }
 

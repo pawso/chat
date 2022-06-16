@@ -50,8 +50,8 @@ public class ChatServer {
         eventsBus.addConsumer(fileTransferConsumer);
 
         LogMessageCreator logMessageCreator = new LogMessageCreator();
-        LogFileWriter logFileWriter = new LogFileWriter("C:\\Users\\soker\\work\\dev-pro\\project1a\\chat");
-        LogWriteMessageConsumer logWriterMessageConsumer = new LogWriteMessageConsumer(logMessageCreator, logFileWriter);
+        LogFileWriter logFileWriter = new LogFileWriter("C:\\Users\\soker\\work\\dev-pro\\project1a\\chat\\log.txt");
+        LogWriteMessageConsumer logWriterMessageConsumer = new LogWriteMessageConsumer(logMessageCreator, logFileWriter, roomCollection);
         eventsBus.addConsumer(logWriterMessageConsumer);
     }
 

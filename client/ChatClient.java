@@ -39,7 +39,7 @@ public class ChatClient {
         consoleReader.start();
 
         textWriter.write("event:USER_JOINED_CHAT " + userName);
-        textWriter.write("event:OPEN_PUBLIC_ROOM wedkarze");
+        // textWriter.write("event:OPEN_PUBLIC_ROOM wedkarze");
         // textWriter.write("event:SEND_FILE wedkarze C:\\Users\\soker\\Desktop\\Bugsnag.dll");
     }
 
