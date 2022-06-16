@@ -53,13 +53,13 @@ class SynchronizedServiceWorkers implements ServerWorkers {
         return count;
     }
 
-    /* @Override
+    @Override
     public Worker get(String name) {
         lock.readLock().lock();
         var worker = serverWorkers.get(name);
         lock.readLock().unlock();
 
         return worker;
-    } */
+    }
 
 }

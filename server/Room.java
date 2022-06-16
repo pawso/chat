@@ -33,8 +33,11 @@ public class Room /* implements Callback */ {
         eventsBus.publish(ServerEvent.builder()
                 .type(LOG_WRITE_MESSAGE)
                 .payload(text)
-                .source(sender)
                 .build());
+    }
+
+    public void publishInfo(String message) {
+        members.broadcast(String.format("[%s]: %s", roomName, message));
     }
 
     public void publishFile(byte[] data) {

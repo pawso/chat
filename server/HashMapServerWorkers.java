@@ -40,6 +40,11 @@ class HashMapServerWorkers implements ServerWorkers {
         workers.forEach((name, worker) -> worker.sendText(text));
     }
 
+    @Override
+    public Worker get(String name) {
+        return workers.get(name);
+    }
+
     /* @Override
     public void broadcastData(byte[] data, FileBroadcaster fileBroadcaster) {
         fileBroadcaster.broadcast(data, this);
@@ -49,9 +54,4 @@ class HashMapServerWorkers implements ServerWorkers {
     public Integer count() {
         return workers.size();
     }
-
-    /* @Override
-    public Worker get(String name) {
-        return workers.get(name);
-    } */
 }

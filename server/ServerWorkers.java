@@ -10,7 +10,7 @@ interface ServerWorkers {
 
     void broadcast(String text);
 
-    // void broadcastData(byte[] data, FileBroadcaster fileBroadcaster);
+    Worker get(String name);
 
     Integer count();
 }

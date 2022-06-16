@@ -41,7 +41,7 @@ public class ChatServer {
 
         var roomCollection = new RoomsMapCollection();
 
-        var roomRequestHandler = new RoomRequestHandler(roomCollection, eventsBus);
+        var roomRequestHandler = new RoomRequestHandler(roomCollection, eventsBus, serverWorkers);
         var roomRequestConsumer = new RoomRequestEventConsumer(roomRequestHandler);
         eventsBus.addConsumer(roomRequestConsumer);
 

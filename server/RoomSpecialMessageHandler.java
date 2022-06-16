@@ -55,9 +55,15 @@ public class RoomSpecialMessageHandler extends MessageHandler {
                     .source(sender)
                     .payload(commandArgs)
                     .build());
-        } else if (message.contains("JOIN_ROOM") || message.contains("ADD_USER_TO_ROOM")) {
+        } else if (message.contains("JOIN_ROOM")) {
             eventsBus.publish(ServerEvent.builder()
                     .type(JOIN_ROOM_REQUEST)
+                    .source(sender)
+                    .payload(commandArgs)
+                    .build());
+        } else if (message.contains("ADD_USER_TO_ROOM")) {
+            eventsBus.publish(ServerEvent.builder()
+                    .type(ADD_USER_TO_ROOM_REQUEST)
                     .source(sender)
                     .payload(commandArgs)
                     .build());

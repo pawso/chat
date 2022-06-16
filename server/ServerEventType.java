@@ -8,7 +8,6 @@ public enum ServerEventType {
     USER_LEFT_CHAT,
     MESSAGE_RECEIVED,
     CONNECTION_CLOSED,
-
     SPECIAL_MESSAGE_RECEIVED,
 
     // Room actions
@@ -16,7 +15,11 @@ public enum ServerEventType {
     PRIVATE_ROOM_OPEN_REQUEST,
     PUBLISH_TO_ROOM_REQUEST,
     JOIN_ROOM_REQUEST,
+    ADD_USER_TO_ROOM_REQUEST,
     CLOSE_ROOM_REQUEST,
+
+    PRIVATE_ROOM_OPENED,
+    PUBLIC_ROOM_OPENED,
 
     // File transfer actions
 
