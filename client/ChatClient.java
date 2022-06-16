@@ -22,8 +22,7 @@ public class ChatClient {
 
         textWriter = new TextWriter(socket);
         this.userName = name;
-
-
+        
         FileTransferHandler fileTransferHandler = new FileTransferHandler(name);
         ClientMessageConsumer incomingMessageConsumer = new ClientMessageConsumer(fileTransferHandler, log::info);
         ClientMessageConsumer outcomingMessageConsumer = new ClientMessageConsumer(fileTransferHandler, textWriter::write);
@@ -40,7 +39,6 @@ public class ChatClient {
 
         textWriter.write("event:USER_JOINED_CHAT " + userName);
         // textWriter.write("event:OPEN_PUBLIC_ROOM wedkarze");
-        // textWriter.write("event:SEND_FILE wedkarze C:\\Users\\soker\\Desktop\\Bugsnag.dll");
     }
 
     public static void main(String[] args) throws IOException {
@@ -51,6 +49,7 @@ public class ChatClient {
         ChatClient chatClient = new ChatClient(hostName, Sockets.parsePort(rawPort, DEFAULT_PORT), userName);
 
         chatClient.start();
-    }
 
+        System.setProperty("java.util.logging.SimpleFormatter.format", "> %5$s %n");
+    }
 }

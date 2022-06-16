@@ -69,7 +69,14 @@ class Worker implements Runnable {
                 .build());
     }
 
+    @SneakyThrows
     private void onInputClose() {
+        eventsBus.publish(ServerEvent.builder()
+                .type(USER_LEFT_CHAT)
+                .payload(name.get())
+                .source(this)
+                .build());
+
         eventsBus.publish(ServerEvent.builder()
                 .type(CONNECTION_CLOSED)
                 .source(this)

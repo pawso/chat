@@ -37,7 +37,6 @@ public class RoomSpecialMessageHandler extends MessageHandler {
         if (message.contains("USER_JOINED_CHAT")) {
             var name = commandArgs;
             sender.setName(name);
-            publishMessage(name + " joined the chat", sender);
         } else if (message.contains("OPEN_PUBLIC_ROOM")) {
             eventsBus.publish(ServerEvent.builder()
                     .type(PUBLIC_ROOM_OPEN_REQUEST)

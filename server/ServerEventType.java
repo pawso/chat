@@ -5,8 +5,10 @@ public enum ServerEventType {
     SERVER_STARTED,
     CONNECTION_ACCEPTED,
     USER_JOINED,
+    USER_LEFT_CHAT,
     MESSAGE_RECEIVED,
     CONNECTION_CLOSED,
+
     SPECIAL_MESSAGE_RECEIVED,
 
     // Room actions

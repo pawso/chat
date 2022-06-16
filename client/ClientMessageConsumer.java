@@ -16,12 +16,13 @@ public class ClientMessageConsumer implements Consumer<String> {
 
     @Override
     public void accept(String text) {
-        if (text.contains("event:ACCEPT_FILE")) {
+        if (text.isBlank()) {
+            return;
+        } else if (text.contains("event:ACCEPT_FILE")) {
             fileTransferHandler.onIncomingFile(text);
-        } if (text.contains("event:SEND_FILE")) {
+        } else if (text.contains("event:SEND_FILE")) {
             String notificationMessage = fileTransferHandler.onOutcomingFile(text);
             next.accept(notificationMessage);
-            // System.out.println(notificationMessage);
         } else {
             next.accept(text);
         }

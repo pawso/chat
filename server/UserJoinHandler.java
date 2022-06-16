@@ -35,7 +35,6 @@ public class UserJoinHandler {
             CompletableFuture<String> name = worker.getName();
 
             while(!name.isDone()) {
-                log.info("Waiting for user handshake...");
                 try {
                     Thread.sleep(HANDSHAKE_WAIT_SLEEP_INTERVAL_MS);
                 } catch (InterruptedException e) {
@@ -44,7 +43,11 @@ public class UserJoinHandler {
             }
             synchronized (this) {
                 serverWorkers.add(worker);
-                eventsBus.publish(ServerEvent.builder().type(USER_JOINED).build());
+                try {
+                    eventsBus.publish(ServerEvent.builder().type(USER_JOINED).payload(name.get()).build());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
