@@ -40,25 +40,16 @@ public class Room /* implements Callback */ {
         members.broadcast(String.format("[%s]: %s", roomName, message));
     }
 
-    public void publishFile(byte[] data) {
-//        FileTransferUploadServer fileTransferServer = new FileTransferUploadServer(/* this::callback , */ members.count());
-//        FileBroadcaster ff = new FileBroadcasterAsynchronous(fileTransferServer);
-//        ff.broadcast(data);
-
+    public void publishFile(byte[] data, String fileName) {
         FileTransferConnectionProvider fileTransferConnectionProvider = new FileTransferConnectionProvider();
-        FileTransferUploadServer fileTransferUploadServer = new FileTransferUploadServer(data, fileTransferConnectionProvider, /* this::callback , */ 1);
+        FileTransferUploadServer fileTransferUploadServer = new FileTransferUploadServer(data, fileTransferConnectionProvider, members.count());
         FileBroadcaster fileBroadcaster = new FileBroadcasterAsynchronous(fileTransferUploadServer);
         fileBroadcaster.broadcast();
 
-        members.broadcast(String.format("event:ACCEPT_FILE %d my_file_name", fileTransferUploadServer.getPort()));
+        members.broadcast(String.format("event:ACCEPT_FILE %d %s", fileTransferUploadServer.getPort(), fileName));
     }
 
     public Boolean containsMember(Worker worker) {
         return members.contains(worker);
     }
-
-    /* @Override
-    public void callback(Boolean wasSuccessful, String message) {
-        // log that transfer was completed
-    } */
 }

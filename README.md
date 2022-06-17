@@ -81,12 +81,54 @@ ROOMs:
     event:REMOVE_FROM_ROOM <room name> Marek
 
 MANUAL TEST SCENARIOS:
-1) 
+MAIN CHAT:
+1. Message written by one user should be broadcast to all connected users.
+2. Users present in chat should receive notification that user joined the chat. 
+3. Users present in chat should receive information that user left the chat.
+
+
+PRIVATE ROOM:
+1. User should be able to open private room.
+   event:OPEN_PRIVATE_ROOM wedkarze
+2. Name of the room should be unique. User should be notified with appropriate message if room already exists
+3. Other users should not be able to join private room. Notification should be transferred back to user.
+   event:JOIN_ROOM wedkarze
+4. Other users could be added to room only by room owner. All members should be notified about user added to room.
+   event:ADD_USER_TO_ROOM wedkarze Marek
+   event:ADD_USER_TO_ROOM wedkarze Tomasz
+5. TODO: Owner should be able to remove user from room. Removed user should receive notification.
+   event:REMOVE_USER_FROM_ROOM wedkarze Marek
+6. Members of room should receive message written by any user. Non-members users should not receive message.
+   event:PUBLISH_TO_ROOM wedkarze szczupak to krol polskich wod
+7. Owner should be able to close the room 
+   event:CLOSE_ROOM wedkarze
+
+
+PUBLIC ROOM:
+1. User should be able to open private room.
+   event:OPEN_PUBLIC_ROOM wedkarze
+2. Name of the room should be unique. User should be notified with appropriate message if room already exists
+3. Users should not be able to add other users to public room
+   event:ADD_USER_TO_ROOM wedkarze Marek
+4. User should be able to join public room
+   event:JOIN_ROOM wedkarze
+5. TODO: User should be able to leave room. After leaving the room notification to others should be send.  
+    event:LEAVE_ROOM wedkarze Marek
+6. User should be able to publish to room:
+   event:PUBLISH_TO_ROOM wedkarze szczupak to krol polskich wod
+7. Members of room should receive message written by any user. Non-members users should not receive message.
+   event:PUBLISH_TO_ROOM wedkarze szczupak to krol polskich wod
+
+
+
+
+
+3) 
     event:OPEN_PUBLIC_ROOM wedkarze
     event:JOIN_ROOM wedkarze
     event:PUBLISH_TO_ROOM wedkarze szczupak to krol polskich wod
     event:PUBLISH_TO_ROOM wedkarze karasie jedza szlam
-2) 
+4) 
     event:OPEN_PRIVATE_ROOM rolnicy
     event:JOIN_ROOM rolnicy
     event:PUBLISH_TO_ROOM rolnicy ziemniak to krol polskiej ziemi

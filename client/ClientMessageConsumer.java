@@ -19,7 +19,8 @@ public class ClientMessageConsumer implements Consumer<String> {
         if (text.isBlank()) {
             return;
         } else if (text.contains("event:ACCEPT_FILE")) {
-            fileTransferHandler.onIncomingFile(text);
+            String notificationMessage = fileTransferHandler.onIncomingFile(text);
+            next.accept(notificationMessage);
         } else if (text.contains("event:SEND_FILE")) {
             String notificationMessage = fileTransferHandler.onOutcomingFile(text);
             next.accept(notificationMessage);

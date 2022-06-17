@@ -30,22 +30,22 @@ public class FileTransferHandler /* implements Callback */ {
         String args[] = CommandUtils.stripCommand(message).split(" ", 2);
 
         String roomName = args[0];
-        String fileName = args[1];
+        File file = new File(args[1]);
 
-        InputStream inputStream = new FileInputStream(fileName);
+        InputStream inputStream = new FileInputStream(file);
 
         byte[] data = inputStream.readAllBytes();
 
         FileTransferConnectionProvider fileTransferConnectionProvider = new FileTransferConnectionProvider();
-        FileTransferUploadServer fileTransferUploadServer = new FileTransferUploadServer(data, fileTransferConnectionProvider, /* this::callback , */ 1);
+        FileTransferUploadServer fileTransferUploadServer = new FileTransferUploadServer(data, fileTransferConnectionProvider, 1);
         FileBroadcaster fileBroadcaster = new FileBroadcasterAsynchronous(fileTransferUploadServer);
         fileBroadcaster.broadcast();
 
-        return String.format("event:SEND_FILE %s %d", roomName, fileTransferUploadServer.getPort());
+        return String.format("event:SEND_FILE %s %d %s", roomName, fileTransferUploadServer.getPort(), file.getName());
     }
 
     @SneakyThrows
-    public void onIncomingFile(String message) {
+    public String onIncomingFile(String message) {
 
         String args[] = CommandUtils.stripCommand(message).split(" ", 2);
 
@@ -75,17 +75,12 @@ public class FileTransferHandler /* implements Callback */ {
 
             bw.write(buffer);
             bw.close();
+            socket.close();
+
         } catch (IOException e){
             e.printStackTrace();
         }
 
-
-
-
+        return String.format("Received file %s", file.getName());
     }
-
-    /* @Override
-    public void callback(Boolean wasSuccessful, String message) {
-
-    } */
 }

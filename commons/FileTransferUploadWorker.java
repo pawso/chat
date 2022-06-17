@@ -6,21 +6,24 @@ import java.net.Socket;
 
 public class FileTransferUploadWorker implements Runnable {
 
-    //  private final Callback callback;
     private final byte[] data;
     private final Socket socket;
 
-    FileTransferUploadWorker(Socket socket, byte[] data /*, Callback callback */) {
+    private final TransferCompletedCallback callback;
+
+    FileTransferUploadWorker(Socket socket, byte[] data, TransferCompletedCallback callback) {
         this.data = data;
-        // this.callback = callback;
         this.socket = socket;
+        this.callback = callback;
     }
 
     @Override
     @SneakyThrows
     public void run() {
         socket.getOutputStream().write(data);
-        socket.shutdownOutput();
-        // callback.callback(true, "successful");
+        socket.getOutputStream().flush();
+        socket.close();
+
+        callback.onTransferCompleted();
     }
 }
