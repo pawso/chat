@@ -38,7 +38,7 @@ public class ChatServer {
     }
 
     private void createHandlers() {
-        var specialMessageHandler = new SpecialMessageHandler(eventsBus, new RoomSpecialMessageHandler(eventsBus), new FileTransferSpecialMessageHandler(eventsBus));
+        var specialMessageHandler = new SpecialMessageDispatcher(eventsBus);
         eventsBus.addConsumer(specialMessageHandler);
 
         var roomCollection = new RoomsMapCollection();

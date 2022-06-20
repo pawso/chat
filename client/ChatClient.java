@@ -38,7 +38,6 @@ public class ChatClient {
         consoleReader.start();
 
         textWriter.write("event:USER_JOINED_CHAT " + userName);
-        textWriter.write("event:OPEN_PUBLIC_ROOM wedkarze");
     }
 
     public static void main(String[] args) throws IOException {
