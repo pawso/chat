@@ -26,7 +26,7 @@ public class SpecialMessageDispatcher implements Consumer<ServerEvent> {
             "JOIN_ROOM",
             "ADD_USER_TO_ROOM",
             "CLOSE_ROOM",
-            "READ_LOG"
+            "READ_HISTORY"
     );
 
     @Override
@@ -87,9 +87,9 @@ public class SpecialMessageDispatcher implements Consumer<ServerEvent> {
                     .source(sender)
                     .payload(arguments)
                     .build());
-        } else if (message.contains("READ_LOG")) {
+        } else if (message.contains("READ_HISTORY")) {
             eventsBus.publish(ServerEvent.builder()
-                    .type(LOG_READ_MESSAGE)
+                    .type(READ_HISTORY_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());

@@ -8,9 +8,6 @@ public class Sockets {
     private static final int MIN_PORT_NUMBER = 80;
     private static final int MAX_PORT_NUMBER = 90000;
 
-    private Sockets() {
-    }
-
     public static int parsePort(String text, int defaultPort) {
         try {
             var port = Integer.parseInt(text);

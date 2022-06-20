@@ -1,16 +1,16 @@
 package concurency.chat.server;
 
-import concurency.chat.commons.FileTransferConnectionProvider;
-import concurency.chat.commons.FileTransferUploadServer;
+import concurency.chat.commons.FileBroadcasterFactory;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import static concurency.chat.server.ServerEventType.LOG_WRITE_MESSAGE;
+import static concurency.chat.server.ServerEventType.MESSAGE_RECEIVED;
 
 @RequiredArgsConstructor
 @Data
-public class Room /* implements Callback */ {
+public class Room {
 
     private final String roomName;
 
@@ -20,7 +20,7 @@ public class Room /* implements Callback */ {
 
     private final EventsBus eventsBus;
 
-    ServerWorkers members = new HashSetServerWorkers();
+    private final ServerWorkers members;
 
     public void addUser(Worker worker) {
         members.add(worker);
@@ -34,6 +34,11 @@ public class Room /* implements Callback */ {
                 .type(LOG_WRITE_MESSAGE)
                 .payload(text)
                 .build());
+
+        /* eventsBus.publish(ServerEvent.builder()
+                .type(MESSAGE_RECEIVED)
+                .payload(text)
+                .build()); */
     }
 
     public void publishInfo(String message) {
@@ -41,12 +46,9 @@ public class Room /* implements Callback */ {
     }
 
     public void publishFile(byte[] data, String fileName) {
-        FileTransferConnectionProvider fileTransferConnectionProvider = new FileTransferConnectionProvider();
-        FileTransferUploadServer fileTransferUploadServer = new FileTransferUploadServer(data, fileTransferConnectionProvider, members.count());
-        FileBroadcaster fileBroadcaster = new FileBroadcasterAsynchronous(fileTransferUploadServer);
+        var fileBroadcaster = FileBroadcasterFactory.createAsynchronousFileBroadcaster(data, 1);
         fileBroadcaster.broadcast();
-
-        members.broadcast(String.format("event:ACCEPT_FILE %d %s", fileTransferUploadServer.getPort(), fileName));
+        members.broadcast(String.format("event:ACCEPT_FILE %d %s", fileBroadcaster.getPort(), fileName));
     }
 
     public Boolean containsMember(Worker worker) {

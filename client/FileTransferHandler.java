@@ -1,9 +1,6 @@
 package concurency.chat.client;
 
-import concurency.chat.commons.CommandUtils;
-import concurency.chat.commons.FileTransferConnectionProvider;
-import concurency.chat.commons.FileTransferUploadServer;
-import concurency.chat.commons.Sockets;
+import concurency.chat.commons.*;
 import concurency.chat.server.FileBroadcaster;
 import concurency.chat.server.FileBroadcasterAsynchronous;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +14,7 @@ import java.nio.file.Paths;
 
 @Log
 @RequiredArgsConstructor
-public class FileTransferHandler /* implements Callback */ {
+public class FileTransferHandler {
 
     private static final Integer DEFAULT_PORT = 8000;
     private static String HOST = "localhost";
@@ -36,12 +33,10 @@ public class FileTransferHandler /* implements Callback */ {
 
         byte[] data = inputStream.readAllBytes();
 
-        FileTransferConnectionProvider fileTransferConnectionProvider = new FileTransferConnectionProvider();
-        FileTransferUploadServer fileTransferUploadServer = new FileTransferUploadServer(data, fileTransferConnectionProvider, 1);
-        FileBroadcaster fileBroadcaster = new FileBroadcasterAsynchronous(fileTransferUploadServer);
+        var fileBroadcaster = FileBroadcasterFactory.createAsynchronousFileBroadcaster(data, 1);
         fileBroadcaster.broadcast();
 
-        return String.format("event:SEND_FILE %s %d %s", roomName, fileTransferUploadServer.getPort(), file.getName());
+        return String.format("event:SEND_FILE %s %d %s", roomName, fileBroadcaster.getPort(), file.getName());
     }
 
     @SneakyThrows

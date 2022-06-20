@@ -12,7 +12,7 @@ import static concurency.chat.server.ServerEventType.SERVER_STARTED;
 @RequiredArgsConstructor
 public class ChatServer {
 
-    private static final String LOG_PATH = "C:\\Users\\soker\\work\\dev-pro\\project1a\\chat\\log.txt";
+    private static final String LOG_FILE = "log.txt";
 
     private static final int DEFAULT_PORT = 8888;
 
@@ -51,9 +51,8 @@ public class ChatServer {
         var fileTransferConsumer = new FileTransferRequestConsumer(fileTransferRequestHandler);
         eventsBus.addConsumer(fileTransferConsumer);
 
-        LogMessageCreator logMessageCreator = new LogMessageCreator();
-        LogFileWriter logFileWriter = new LogFileWriter(LOG_PATH);
-        LogWriteMessageConsumer logWriterMessageConsumer = new LogWriteMessageConsumer(logMessageCreator, logFileWriter, roomCollection);
+        LogFileWriter logFileWriter = new LogFileWriter(LOG_FILE);
+        LogWriteMessageConsumer logWriterMessageConsumer = new LogWriteMessageConsumer(logFileWriter, roomCollection);
         eventsBus.addConsumer(logWriterMessageConsumer);
     }
 

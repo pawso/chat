@@ -37,13 +37,6 @@ class SynchronizedServiceWorkers implements ServerWorkers {
         lock.readLock().unlock();
     }
 
-    /* @Override
-    public void broadcastData(byte[] data, FileBroadcaster fileBroadcaster) {
-        lock.readLock().lock();
-        serverWorkers.broadcastData(data, fileBroadcaster);
-        lock.readLock().unlock();
-    } */
-
     @Override
     public Integer count() {
         lock.readLock().lock();

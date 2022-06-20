@@ -45,20 +45,18 @@ class Worker implements Runnable {
 
     @SneakyThrows
     private void handleMessage(String text) {
+        ServerEventType eventType;
         if (CommandUtils.isCommand(text)) {
-            eventsBus.publish(ServerEvent.builder()
-                    .type(SPECIAL_MESSAGE_RECEIVED)
-                    .payload(text)
-                    .source(this)
-                    .build());
+            eventType = SPECIAL_MESSAGE_RECEIVED;
         } else {
             publishMessage(name.get() + ": " + text);
-            eventsBus.publish(ServerEvent.builder()
-                    .type(LOG_WRITE_MESSAGE)
-                    .payload(text)
-                    .source(this)
-                    .build());
+            eventType = LOG_WRITE_MESSAGE;
         }
+        eventsBus.publish(ServerEvent.builder()
+                .type(eventType)
+                .payload(text)
+                .source(this)
+                .build());
     }
 
     private void publishMessage(String text) {
@@ -85,10 +83,5 @@ class Worker implements Runnable {
 
     void sendText(String text) {
         writer.write(text);
-    }
-
-    void sendFile(byte[] data) {
-
-        // writer.write(data);
     }
 }

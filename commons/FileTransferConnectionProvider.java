@@ -3,7 +3,6 @@ package concurency.chat.commons;
 
 import lombok.SneakyThrows;
 
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 

@@ -28,10 +28,8 @@ public class FileTransferUploadServer implements Runnable, TransferCompletedCall
     }
 
     @Override
-    public void onTransferCompleted() {
-        synchronized (this) {
+    public synchronized void onTransferCompleted() {
             unfinishedReceivers--;
-        }
         if (unfinishedReceivers == 0) {
             fileTransferConnectionProvider.close();
         }

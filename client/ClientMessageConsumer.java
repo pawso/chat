@@ -5,8 +5,6 @@ import lombok.extern.java.Log;
 
 import java.util.function.Consumer;
 
-
-
 @Log
 @RequiredArgsConstructor
 public class ClientMessageConsumer implements Consumer<String> {

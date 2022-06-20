@@ -18,7 +18,7 @@ public class RoomRequestHandler {
             source.sendText(String.format("Room %s already exists", roomName));
             return;
         }
-        Room room = new Room(roomName, source, isPublic, eventsBus);
+        Room room = new Room(roomName, source, isPublic, eventsBus, new HashSetServerWorkers());
         room.addUser(source);
         rooms.addRoom(roomName, room);
 

@@ -19,8 +19,6 @@ public class RoomRequestEventConsumer implements Consumer<ServerEvent> {
             case ADD_USER_TO_ROOM_REQUEST -> requestHandler.addUserToPrivateRoom(event.getPayload(), event.getSource());
             case JOIN_ROOM_REQUEST -> requestHandler.addUserToPublicRoom(event.getPayload(), event.getSource());
             // optional: case REMOVE_USER_FROM_ROOM -> addUserToRoom(event.getPayload(), event.getSource());
-
-            // case SEND_FILE_REQUEST -> requestHandler.sendFileToRoom(event.getPayload(), event.getSource());
         }
     }
 }
