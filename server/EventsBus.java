@@ -1,4 +1,4 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat.server;
 
 import java.util.HashSet;
 import java.util.Set;

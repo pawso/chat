@@ -1,4 +1,4 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat.server;
 
 interface ServerWorkers {
 
@@ -6,6 +6,11 @@ interface ServerWorkers {
 
     void remove(Worker worker);
 
+    Boolean contains(Worker worker);
+
     void broadcast(String text);
 
+    Worker get(String name);
+
+    Integer count();
 }

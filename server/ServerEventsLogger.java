@@ -1,4 +1,4 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat.server;
 
 import lombok.extern.java.Log;
 
@@ -13,6 +13,8 @@ class ServerEventsLogger implements Consumer<ServerEvent> {
             case SERVER_STARTED -> log.info("Server started.");
             case CONNECTION_ACCEPTED -> log.info("New connection accepted.");
             case CONNECTION_CLOSED -> log.info("Connection form client closed.");
+            case SPECIAL_MESSAGE_RECEIVED_HANDLED -> log.info(String.format("Received known command: %s", event.getPayload()));
+            case SPECIAL_MESSAGE_RECEIVED_UNHANDLED -> log.info(String.format("Received unknown command: %s", event.getPayload()));
         }
     }
 

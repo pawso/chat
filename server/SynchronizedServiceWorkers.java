@@ -1,4 +1,4 @@
-package pl.training.concurrency.ex011_chat_v2;
+package concurency.chat.server;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,10 +26,33 @@ class SynchronizedServiceWorkers implements ServerWorkers {
     }
 
     @Override
+    public Boolean contains(Worker worker) {
+        return serverWorkers.contains(worker);
+    }
+
+    @Override
     public void broadcast(String text) {
         lock.readLock().lock();
         serverWorkers.broadcast(text);
         lock.readLock().unlock();
+    }
+
+    @Override
+    public Integer count() {
+        lock.readLock().lock();
+        Integer count = serverWorkers.count();
+        lock.readLock().unlock();
+
+        return count;
+    }
+
+    @Override
+    public Worker get(String name) {
+        lock.readLock().lock();
+        var worker = serverWorkers.get(name);
+        lock.readLock().unlock();
+
+        return worker;
     }
 
 }

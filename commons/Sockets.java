@@ -1,4 +1,4 @@
-package pl.training.concurrency.ex011_chat_v2.commons;
+package concurency.chat.commons;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -6,10 +6,7 @@ import java.net.Socket;
 public class Sockets {
 
     private static final int MIN_PORT_NUMBER = 80;
-    private static final int MAX_PORT_NUMBER = 9000;
-
-    private Sockets() {
-    }
+    private static final int MAX_PORT_NUMBER = 90000;
 
     public static int parsePort(String text, int defaultPort) {
         try {
