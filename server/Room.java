@@ -46,7 +46,7 @@ public class Room {
     }
 
     public void publishFile(byte[] data, String fileName) {
-        var fileBroadcaster = FileBroadcasterFactory.createAsynchronousFileBroadcaster(data, 1);
+        var fileBroadcaster = FileBroadcasterFactory.createAsynchronousFileBroadcaster(data, members.count());
         fileBroadcaster.broadcast();
         members.broadcast(String.format("event:ACCEPT_FILE %d %s", fileBroadcaster.getPort(), fileName));
     }
