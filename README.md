@@ -1,3 +1,69 @@
+#PROJECT 1 - CHAT
+
+Chat application supports sending messages to public room as well as special commands in form: event:<command> <args>
+
+Supported functionalities are: 
+
+####MAIN CHAT:
+
+* Message written by one user should be broadcast to all connected users.  
+* Users present in chat should receive notification that user joined the chat.
+* Users present in chat should receive information that user left the chat.
+
+![img.png](img.png)
+
+####PRIVATE ROOM:
+* User can open private room and become owner of it
+* Owner can add other users to room
+* User can not join room on its own
+* Message send to room is received by all room members   
+* Possible commands are as below:  
+  *event:OPEN_PRIVATE_ROOM rolnicy*  
+  *event:ADD_USER_TO_ROOM rolnicy Tomasz*  
+  *event:PUBLISH_TO_ROOM rolnicy My message* 
+
+![img_1.png](img_1.png)
+
+####PUBLIC ROOM:
+* User can open public room  
+* Other users can join room on their own
+* Users can not be added to room by other users
+* Message send to room is received by all room members
+* Possible commands are as below:  
+  *event:OPEN_PRIVATE_ROOM rolnicy*  
+  *event:JOIN_ROOM rolnicy*  
+  *event:PUBLISH_TO_ROOM My message*  
+
+![img_2.png](img_2.png)
+
+####FILE TRANSFER
+* It is possible to broadcast file to all room members  
+* File is stored within chat client process work dir  
+* Message about file received is displayed to file receivers  
+* The functionality does not prompt - the assumption was tha it simulates sending image/gif to other users  
+* Command to trigger file transfer is as below:  
+  *event:SEND_FILE wedkarze C:\\Users\\soker\\Desktop\\Bugsnag.dll*  
+
+![img_3.png](img_3.png)
+
+####CHAT HISTORY
+* Once user becomes member of the room, it is possible for it to retrieve all conversation history for given room  
+* Command to fetch history is:  
+  *event:READ_HISTORY wedkarze*  
+
+![img_4.png](img_4.png)
+
+
+
+==================================================================================================  
+RANDOM DEV NOTES BELOW - DON'T READ UNLESS FORCED  
+==================================================================================================  
+
+
+
+
+
+
 Work diary
 
 -> Initial implementation treats each incoming connection as new user and broadcast each message to each user. This restricts sending special messages, like /open-room, /send-file, etc. Connection is than indexed by worker id.
@@ -81,10 +147,7 @@ ROOMs:
     event:REMOVE_FROM_ROOM <room name> Marek
 
 MANUAL TEST SCENARIOS:
-MAIN CHAT:
-1. Message written by one user should be broadcast to all connected users.
-2. Users present in chat should receive notification that user joined the chat. 
-3. Users present in chat should receive information that user left the chat.
+
 
 
 PRIVATE ROOM:
@@ -118,10 +181,6 @@ PUBLIC ROOM:
    event:PUBLISH_TO_ROOM wedkarze szczupak to krol polskich wod
 7. Members of room should receive message written by any user. Non-members users should not receive message.
    event:PUBLISH_TO_ROOM wedkarze szczupak to krol polskich wod
-
-
-
-
 
 3) 
     event:OPEN_PUBLIC_ROOM wedkarze
