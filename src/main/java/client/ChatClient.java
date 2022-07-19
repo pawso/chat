@@ -22,7 +22,7 @@ public class ChatClient {
     private OutcomingMessageConsumer outcomingMessageConsumer;
 
     @Inject
-    ChatClient(String userName,
+    ChatClient(@UserName String userName,
                Socket socket,
                TextWriter textWriter,
                IncomingMessageConsumer incomingMessageConsumer,

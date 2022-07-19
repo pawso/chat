@@ -23,7 +23,7 @@ public class FileTransferHandler {
     private final String userName;
 
     @Inject
-    public FileTransferHandler(String userName) {
+    public FileTransferHandler(@UserName String userName) {
         this.userName = userName;
     }
 

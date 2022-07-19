@@ -1,14 +1,20 @@
 package server;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
-@RequiredArgsConstructor
 public class LogWriteMessageConsumer implements Consumer<ServerEvent> {
 
-    final LogFileWriter logFileWriter;
-    final RoomsMapCollection rooms;
+    private final LogFileWriter logFileWriter;
+    private final RoomsMapCollection rooms;
+
+    @Inject
+    public LogWriteMessageConsumer(LogFileWriter logFileWriter, RoomsMapCollection rooms) {
+        this.logFileWriter = logFileWriter;
+        this.rooms = rooms;
+    }
 
     @Override
     public void accept(ServerEvent event) {

@@ -18,6 +18,7 @@ public class Beans {
     InputArguments inputArguments;
 
     @Produces
+    @UserName
     public String userName() {
         return inputArguments.getUserName();
     }

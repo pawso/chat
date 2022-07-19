@@ -1,14 +1,21 @@
 package server;
 
 import commons.Sockets;
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.net.Socket;
 
-@RequiredArgsConstructor
+
 public class FileTransferRequestHandler {
     private final RoomsMapCollection rooms;
+
+    @Inject
+    public FileTransferRequestHandler(RoomsMapCollection rooms) {
+        this.rooms = rooms;
+    }
+
     @SneakyThrows
     void handleFileTransferRequest(String payload, Worker source) {
         var args = payload.split(" ", 3);

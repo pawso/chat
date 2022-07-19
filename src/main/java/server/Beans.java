@@ -25,4 +25,11 @@ public class Beans {
         return new EventsBus();
     } */
 
+    private static final String LOG_PATH = "log.txt";
+
+    @Produces
+    @LogFilePath
+    public String logFilePath() {
+        return LOG_PATH;
+    }
 }

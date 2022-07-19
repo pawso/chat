@@ -1,16 +1,24 @@
 package server;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import static server.ServerEventType.*;
 
-@RequiredArgsConstructor
+
 public class RoomRequestHandler {
     private final RoomsMapCollection rooms;
     private final EventsBus eventsBus;
 
     private final ServerWorkers workers;
+
+    @Inject
+    public RoomRequestHandler(RoomsMapCollection rooms, EventsBus eventsBus, @SynchronizedWorkers ServerWorkers workers) {
+        this.rooms = rooms;
+        this.eventsBus = eventsBus;
+        this.workers = workers;
+    }
 
     void openRoom(String payload, Worker source, Boolean isPublic) {
         String roomName = payload;

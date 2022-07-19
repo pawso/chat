@@ -1,13 +1,18 @@
 package server;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
-@RequiredArgsConstructor
 public class RoomRequestEventConsumer implements Consumer<ServerEvent> {
 
     private final RoomRequestHandler requestHandler;
+
+    @Inject
+    public RoomRequestEventConsumer(RoomRequestHandler requestHandler) {
+        this.requestHandler = requestHandler;
+    }
 
     @Override
     public void accept(ServerEvent event) {

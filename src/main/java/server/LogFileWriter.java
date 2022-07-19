@@ -1,5 +1,6 @@
 package server;
 
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 
 import java.io.*;
@@ -7,12 +8,13 @@ import java.io.*;
 public class LogFileWriter {
 
     final PrintWriter writer;
-    final String filePath;
+    final String logFilePath;
 
+    @Inject
     @SneakyThrows
-    LogFileWriter(String filePath) {
-        this.filePath = filePath;
-        writer = new PrintWriter(new FileWriter(filePath));
+    LogFileWriter(@LogFilePath String logFilePath) {
+        this.logFilePath = logFilePath;
+        writer = new PrintWriter(new FileWriter(logFilePath));
     }
 
     @SneakyThrows
@@ -27,7 +29,7 @@ public class LogFileWriter {
     public String readRoomHistory(String roomName) {
         String out = "History for room " + roomName + ": ";
         String line;
-        BufferedReader reader= new BufferedReader(new FileReader(filePath));
+        BufferedReader reader= new BufferedReader(new FileReader(logFilePath));
         synchronized (this) {
             while ((line = reader.readLine()) != null) {
                 if (line.contains("[" + roomName + "]")) {

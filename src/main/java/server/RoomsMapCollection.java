@@ -1,7 +1,10 @@
 package server;
 
+import jakarta.inject.Singleton;
+
 import java.util.HashMap;
 
+@Singleton
 public class RoomsMapCollection {
     private final HashMap<String, Room> rooms = new HashMap<>();
 
