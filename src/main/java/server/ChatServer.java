@@ -1,5 +1,6 @@
 package server;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import commons.Sockets;
 
@@ -9,22 +10,43 @@ import java.net.ServerSocket;
 import static server.ServerEventType.CONNECTION_ACCEPTED;
 import static server.ServerEventType.SERVER_STARTED;
 
-@RequiredArgsConstructor
 public class ChatServer {
 
     private static final String LOG_FILE = "log.txt";
 
-    private static final int DEFAULT_PORT = 8888;
 
-    private final ServerWorkers serverWorkers;
-    private final EventsBus eventsBus;
+     private final ServerWorkers serverWorkers;
+     private final EventsBus eventsBus;
+     private final UserJoinHandler userJoinHandler;
+     private final ServerEventsLogger serverEventsLogger;
+     private final MessagesHistoryLogger messagesHistoryLogger;
+     private final ServerEventsProcessor serverEventsProcessor;
+     private final SpecialMessageDispatcher specialMessageDispatcher;
 
-    private final UserJoinHandler userJoinHandler;
+    @Inject
+    public ChatServer(EventsBus eventsBus,
+                      @SynchronizedWorkers ServerWorkers serverWorkers,
+                      UserJoinHandler userJoinHandler,
+                      ServerEventsLogger serverEventsLogger,
+                      MessagesHistoryLogger messagesHistoryLogger,
+                      ServerEventsProcessor serverEventsProcessor,
+                      SpecialMessageDispatcher specialMessageDispatcher) {
+        this.eventsBus = eventsBus;
+        this.serverWorkers = serverWorkers;
+        this.userJoinHandler = userJoinHandler;
+        this.serverEventsLogger = serverEventsLogger;
+        this.messagesHistoryLogger = messagesHistoryLogger;
+        this.serverEventsProcessor = serverEventsProcessor;
+        this.specialMessageDispatcher = specialMessageDispatcher;
+    }
 
+    public void start(int port) throws IOException {
+        eventsBus.addConsumer(serverEventsLogger);
+        eventsBus.addConsumer(messagesHistoryLogger);
+        eventsBus.addConsumer(serverEventsProcessor);
+        eventsBus.addConsumer(specialMessageDispatcher);
 
-    private void start(int port) throws IOException {
         createHandlers();
-        eventsBus.addConsumer(new ServerEventsProcessor(serverWorkers));
 
         try (var serverSocket = new ServerSocket(port)) {
             eventsBus.publish(ServerEvent.builder().type(SERVER_STARTED).build());
@@ -38,9 +60,6 @@ public class ChatServer {
     }
 
     private void createHandlers() {
-        var specialMessageHandler = new SpecialMessageDispatcher(eventsBus);
-        eventsBus.addConsumer(specialMessageHandler);
-
         var roomCollection = new RoomsMapCollection();
 
         var roomRequestHandler = new RoomRequestHandler(roomCollection, eventsBus, serverWorkers);
@@ -55,20 +74,4 @@ public class ChatServer {
         LogWriteMessageConsumer logWriterMessageConsumer = new LogWriteMessageConsumer(logFileWriter, roomCollection);
         eventsBus.addConsumer(logWriterMessageConsumer);
     }
-
-    public static void main(String[] args) throws IOException {
-        var port = Sockets.parsePort(args[0], DEFAULT_PORT);
-        var eventsBus = new EventsBus();
-
-        eventsBus.addConsumer(new ServerEventsLogger());
-        eventsBus.addConsumer(new MessagesHistoryLogger());
-
-        var serviceWorkers = new SynchronizedServiceWorkers(new HashMapServerWorkers());
-        var userJoinHandler = new UserJoinHandler(eventsBus, serviceWorkers);
-
-        var server = new ChatServer(serviceWorkers, eventsBus, userJoinHandler);
-
-        server.start(port);
-    }
-
 }

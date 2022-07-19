@@ -1,13 +1,18 @@
 package server;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
-@RequiredArgsConstructor
 public class ServerEventsProcessor implements Consumer<ServerEvent> {
 
     private final ServerWorkers serverWorkers;
+
+    @Inject
+    public ServerEventsProcessor(@SynchronizedWorkers ServerWorkers serverWorkers) {
+        this.serverWorkers = serverWorkers;
+    }
 
     @Override
     public void accept(ServerEvent event) {

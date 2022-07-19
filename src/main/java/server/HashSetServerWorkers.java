@@ -1,8 +1,11 @@
 package server;
 
+import jakarta.enterprise.inject.Alternative;
+
 import java.util.HashSet;
 import java.util.Set;
 
+@HashSetWorkers
 class HashSetServerWorkers implements ServerWorkers {
 
     private final Set<Worker> workers = new HashSet<>();

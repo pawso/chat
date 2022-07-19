@@ -1,5 +1,6 @@
 package server;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -12,18 +13,23 @@ import java.util.concurrent.Executors;
 import static server.ServerEventType.USER_JOINED;
 
 @Log
-@RequiredArgsConstructor
 public class UserJoinHandler {
 
     private static final int JOINER_THREAD_CNT = 16;
     private static final int USER_THREADS_COUNT = 1024;
     private static final int HANDSHAKE_WAIT_SLEEP_INTERVAL_MS = 100;
 
+    private final ExecutorService joinerExecutor = Executors.newFixedThreadPool(JOINER_THREAD_CNT);
+    private final ExecutorService userExecutor = Executors.newFixedThreadPool(USER_THREADS_COUNT);
+
     private final EventsBus eventsBus;
     private final ServerWorkers serverWorkers;
 
-    private final ExecutorService joinerExecutor = Executors.newFixedThreadPool(JOINER_THREAD_CNT);
-    private final ExecutorService userExecutor = Executors.newFixedThreadPool(USER_THREADS_COUNT);
+    @Inject
+    public UserJoinHandler(EventsBus eventsBus, @SynchronizedWorkers ServerWorkers serverWorkers) {
+        this.eventsBus = eventsBus;
+        this.serverWorkers = serverWorkers;
+    }
 
     public void joinUser(Socket socket) {
 

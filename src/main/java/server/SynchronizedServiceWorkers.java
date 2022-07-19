@@ -1,15 +1,22 @@
 package server;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@RequiredArgsConstructor
+@SynchronizedWorkers
+@Singleton
 class SynchronizedServiceWorkers implements ServerWorkers {
 
     private final ServerWorkers serverWorkers;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    @Inject
+    public SynchronizedServiceWorkers(@HashMapWorkers ServerWorkers serverWorkers) {
+        this.serverWorkers = serverWorkers;
+    }
 
     @Override
     public void add(Worker worker) {

@@ -1,6 +1,7 @@
 package server;
 
 import commons.CommandUtils;
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -11,10 +12,13 @@ import java.util.function.Consumer;
 import static server.ServerEventType.*;
 
 @Log
-@RequiredArgsConstructor
 public class SpecialMessageDispatcher implements Consumer<ServerEvent> {
-
     private final EventsBus eventsBus;
+
+    @Inject
+    public SpecialMessageDispatcher(EventsBus eventsBus) {
+        this.eventsBus = eventsBus;
+    }
 
     private static final List<String> HANDLED_COMMANDS = Arrays.asList(
             "SEND_FILE",
