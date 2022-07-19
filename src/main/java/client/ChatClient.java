@@ -23,21 +23,31 @@ public class ChatClient {
 
     @Inject
     ChatClient(String userName,
+               Socket socket,
                TextWriter textWriter,
                IncomingMessageConsumer incomingMessageConsumer,
                OutcomingMessageConsumer outcomingMessageConsumer) {
         this.textWriter = textWriter;
+        this.userName = userName;
+
+        // Socket socket = new Socket(inputArguments.getHostName(), inputArguments.getPort());
+
+        readFromSocket = () -> new TextReader(socket, incomingMessageConsumer, () -> Sockets.close(socket)).read();
+        readFromConsole = () -> new TextReader(System.in, outcomingMessageConsumer).read();
+
         this.incomingMessageConsumer = incomingMessageConsumer;
         this.outcomingMessageConsumer = outcomingMessageConsumer;
     }
 
     public ChatClient init(InputArguments inputArguments) throws IOException {
-        this.userName = inputArguments.getUserName();
+        /* this.userName = inputArguments.getUserName();
 
         Socket socket = new Socket(inputArguments.getHostName(), inputArguments.getPort());
 
         readFromSocket = () -> new TextReader(socket, incomingMessageConsumer, () -> Sockets.close(socket)).read();
         readFromConsole = () -> new TextReader(System.in, outcomingMessageConsumer).read();
+
+        return this; */
 
         return this;
     }

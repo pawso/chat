@@ -14,17 +14,17 @@ import java.util.List;
 @ApplicationScoped
 public class Beans {
 
-//    @Inject
-//    InputArguments inputArguments;
-//
-//    @Produces
-//    public String userName() {
-//        return inputArguments.getUserName();
-//    }
-//
-//    @Produces
-//    @Singleton
-//    public Socket socket() throws IOException {
-//        return new Socket(inputArguments.getHostName(), inputArguments.getPort());
-//    }
+    @Inject
+    InputArguments inputArguments;
+
+    @Produces
+    public String userName() {
+        return inputArguments.getUserName();
+    }
+
+    @Produces
+    @Singleton
+    public Socket socket() throws IOException {
+        return new Socket(inputArguments.getHostName(), inputArguments.getPort());
+    }
 }

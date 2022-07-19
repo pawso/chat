@@ -25,6 +25,13 @@ public class InputArguments {
     private final int port;
     private final String userName;
 
+    @Inject
+    public InputArguments() {
+        this.hostName = HOST_NAME;
+        this.port = PORT;
+        this.userName = USER_NAME;
+    }
+
     public InputArguments(String userName, String hostName, String port) {
         this.hostName = hostName;
         this.port = Sockets.parsePort(port, PORT);
