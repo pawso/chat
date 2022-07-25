@@ -1,6 +1,8 @@
 package server;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -13,6 +15,7 @@ import java.util.concurrent.Executors;
 import static server.ServerEventType.USER_JOINED;
 
 @Log
+@Singleton
 public class UserJoinHandler {
 
     private static final int JOINER_THREAD_CNT = 16;

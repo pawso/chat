@@ -1,10 +1,13 @@
 package server;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import lombok.SneakyThrows;
 
 import java.io.*;
 
+@Singleton
 public class LogFileWriter {
 
     final PrintWriter writer;

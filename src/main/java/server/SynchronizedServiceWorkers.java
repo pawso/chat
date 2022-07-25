@@ -1,7 +1,9 @@
 package server;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import javax.enterprise.inject.Any;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+// import jakarta.inject.Singleton;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;

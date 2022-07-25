@@ -1,13 +1,15 @@
 package server;
 
 import commons.Sockets;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.net.Socket;
 
-
+@Singleton
 public class FileTransferRequestHandler {
     private final RoomsMapCollection rooms;
 

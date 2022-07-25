@@ -1,7 +1,8 @@
 package commons;
 
-import jakarta.enterprise.inject.Default;
-import jakarta.inject.Inject;
+// import jakarta.enterprise.inject.Default;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import lombok.extern.java.Log;
 
 import java.io.IOException;

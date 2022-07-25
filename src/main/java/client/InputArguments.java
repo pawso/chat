@@ -1,12 +1,14 @@
 package client;
 
 import commons.Sockets;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Default;
-import jakarta.enterprise.inject.Model;
-import jakarta.enterprise.inject.Produces;
-import jakarta.enterprise.inject.Vetoed;
-import jakarta.inject.Inject;
+//import jakarta.enterprise.context.ApplicationScoped;
+//import jakarta.enterprise.inject.Default;
+//import jakarta.enterprise.inject.Model;
+//import jakarta.enterprise.inject.Produces;
+//import jakarta.enterprise.inject.Vetoed;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import org.jboss.weld.environment.se.bindings.Parameters;
 import java.util.List;
 
 @Data
+@Default
+@Dependent
 public class InputArguments {
 
     private static final String HOST_NAME = "localhost";

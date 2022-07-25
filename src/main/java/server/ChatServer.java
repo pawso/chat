@@ -1,8 +1,18 @@
 package server;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
 import lombok.RequiredArgsConstructor;
 import commons.Sockets;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,6 +20,8 @@ import java.net.ServerSocket;
 import static server.ServerEventType.CONNECTION_ACCEPTED;
 import static server.ServerEventType.SERVER_STARTED;
 
+@Slf4j
+@Path("/chatInput")
 public class ChatServer {
 
      private final ServerWorkers serverWorkers;
@@ -63,5 +75,13 @@ public class ChatServer {
                 eventsBus.publish(ServerEvent.builder().type(CONNECTION_ACCEPTED).build());
             }
         }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response handlePostRequest(@Context UriInfo uriInfo) {
+        log.info("---------> Received input");
+        return Response.accepted().build();
     }
 }

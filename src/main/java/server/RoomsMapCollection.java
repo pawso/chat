@@ -1,7 +1,8 @@
 package server;
 
-import jakarta.inject.Singleton;
+// import jakarta.inject.Singleton;
 
+import javax.inject.Singleton;
 import java.util.HashMap;
 
 @Singleton

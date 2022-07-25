@@ -1,7 +1,7 @@
 package client;
 
 import commons.*;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import server.FileBroadcaster;
 import server.FileBroadcasterAsynchronous;
 import lombok.RequiredArgsConstructor;

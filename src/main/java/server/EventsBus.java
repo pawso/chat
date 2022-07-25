@@ -1,9 +1,10 @@
 package server;
 
-import jakarta.enterprise.inject.Any;
-import jakarta.enterprise.inject.Default;
-import jakarta.inject.Singleton;
+//import jakarta.enterprise.inject.Any;
+//import jakarta.enterprise.inject.Default;
+//import jakarta.inject.Singleton;
 
+import javax.inject.Singleton;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;

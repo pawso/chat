@@ -1,12 +1,14 @@
 package server;
 
-import jakarta.enterprise.inject.Default;
+// import jakarta.enterprise.inject.Default;
 
+import javax.enterprise.context.Dependent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @HashMapWorkers
+@Dependent
 class HashMapServerWorkers implements ServerWorkers {
 
     private final Map<String, Worker> workers = new HashMap<>();

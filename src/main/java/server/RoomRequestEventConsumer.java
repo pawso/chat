@@ -1,10 +1,13 @@
 package server;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
+@Singleton
 public class RoomRequestEventConsumer implements Consumer<ServerEvent> {
 
     private final RoomRequestHandler requestHandler;

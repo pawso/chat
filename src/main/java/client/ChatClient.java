@@ -4,9 +4,10 @@ import client.messageconsumer.ClientMessageConsumer;
 import client.messageconsumer.IncomingMessageConsumer;
 import client.messageconsumer.OutcomingMessageConsumer;
 import commons.*;
-import jakarta.inject.Inject;
+//import javax.inject.Inject;
 import lombok.extern.java.Log;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.Socket;
 

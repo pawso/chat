@@ -1,7 +1,8 @@
 package client;
 
-import jakarta.inject.Qualifier;
+// import jakarta.inject.Qualifier;
 
+import javax.inject.Qualifier;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

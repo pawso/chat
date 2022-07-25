@@ -3,7 +3,7 @@ package client.messageconsumer;
 import client.FileTransferHandler;
 import client.LogMessage;
 import commons.WriteMessage;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 import java.util.function.Consumer;
 

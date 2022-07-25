@@ -1,12 +1,15 @@
 package server;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import static server.ServerEventType.*;
 
 
+@Singleton
 public class RoomRequestHandler {
     private final RoomsMapCollection rooms;
     private final EventsBus eventsBus;

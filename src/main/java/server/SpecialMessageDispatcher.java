@@ -1,7 +1,9 @@
 package server;
 
 import commons.CommandUtils;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -12,6 +14,7 @@ import java.util.function.Consumer;
 import static server.ServerEventType.*;
 
 @Log
+@Singleton
 public class SpecialMessageDispatcher implements Consumer<ServerEvent> {
     private final EventsBus eventsBus;
 

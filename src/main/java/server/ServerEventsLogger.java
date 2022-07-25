@@ -2,9 +2,11 @@ package server;
 
 import lombok.extern.java.Log;
 
+import javax.inject.Singleton;
 import java.util.function.Consumer;
 
 @Log
+@Singleton
 class ServerEventsLogger implements Consumer<ServerEvent> {
 
     @Override
