@@ -12,44 +12,45 @@ import java.util.concurrent.CompletableFuture;
 import static server.ServerEventType.*;
 
 @Log
-class Worker implements Runnable {
+class Worker /* implements Runnable */ {
 
-    private final Socket socket;
+    // private final Socket socket;
     private final EventsBus eventsBus;
-    private final TextWriter writer;
-    private final CompletableFuture<String> name;
+    // private final TextWriter writer;
+    private String name;
 
-    Worker(Socket socket, EventsBus eventsBus) {
-        this.socket = socket;
+    int port;
+
+    Worker(int port, String name, EventsBus eventsBus) {
+        // this.socket = socket;
         this.eventsBus = eventsBus;
-        writer = new TextWriter(socket);
-        name = new CompletableFuture<>();
+        // writer = new TextWriter(socket);
+        this.name = name;
     }
 
-    @Override
-    public void run() {
+    // @Override
+    /* public void run() {
         new TextReader(socket, this::onText, this::onInputClose).read();
-    }
+    } */
 
-    public CompletableFuture<String> getName() {
+    public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name.complete(name);
+        this.name = name;
     }
 
     private void onText(String text) {
         handleMessage(text);
     }
 
-    @SneakyThrows
     private void handleMessage(String text) {
         ServerEventType eventType;
         if (CommandUtils.isCommand(text)) {
             eventType = SPECIAL_MESSAGE_RECEIVED;
         } else {
-            publishMessage(name.get() + ": " + text);
+            publishMessage(name + ": " + text);
             eventType = LOG_WRITE_MESSAGE;
         }
         eventsBus.publish(ServerEvent.builder()
@@ -71,7 +72,7 @@ class Worker implements Runnable {
     private void onInputClose() {
         eventsBus.publish(ServerEvent.builder()
                 .type(USER_LEFT_CHAT)
-                .payload(name.get())
+                .payload(name)
                 .source(this)
                 .build());
 
@@ -82,6 +83,7 @@ class Worker implements Runnable {
     }
 
     void sendText(String text) {
-        writer.write(text);
+        // writer.write(text);
+        // send response here
     }
 }

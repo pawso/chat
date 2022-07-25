@@ -26,9 +26,8 @@ public class Room {
         members.add(worker);
     }
 
-    @SneakyThrows
     public void publishMessage(String message, Worker sender) {
-        String text = String.format("[%s] %s says: %s", roomName, sender.getName().get(), message);
+        String text = String.format("[%s] %s says: %s", roomName, sender.getName(), message);
         members.broadcast(text);
         eventsBus.publish(ServerEvent.builder()
                 .type(LOG_WRITE_MESSAGE)

@@ -15,24 +15,14 @@ class HashMapServerWorkers implements ServerWorkers {
 
     @Override
     public void add(Worker worker) {
-        try {
-            workers.put(worker.getName().get(), worker);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        workers.put(worker.getName(), worker);
     }
 
     @Override
     public void remove(Worker worker) {
-        try {
-            workers.remove(worker.getName().get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+
+            workers.remove(worker.getName());
+
     }
 
     @Override

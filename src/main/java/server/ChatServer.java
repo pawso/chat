@@ -17,13 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import static server.ServerEventType.CONNECTION_ACCEPTED;
-import static server.ServerEventType.SERVER_STARTED;
+import static server.ServerEventType.*;
 
 @Slf4j
-@Path("/chatInput")
+@Path("/joinUser")
+// @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ChatServer {
-
      private final ServerWorkers serverWorkers;
      private final EventsBus eventsBus;
      private final UserJoinHandler userJoinHandler;
@@ -45,7 +44,8 @@ public class ChatServer {
                       SpecialMessageDispatcher specialMessageDispatcher,
                       RoomRequestEventConsumer roomRequestEventConsumer,
                       FileTransferRequestConsumer fileTransferRequestConsumer,
-                      LogWriteMessageConsumer logWriterMessageConsumer) {
+                      LogWriteMessageConsumer logWriterMessageConsumer
+    ) {
         this.eventsBus = eventsBus;
         this.serverWorkers = serverWorkers;
         this.userJoinHandler = userJoinHandler;
@@ -56,9 +56,7 @@ public class ChatServer {
         this.roomRequestEventConsumer = roomRequestEventConsumer;
         this.fileTransferRequestConsumer = fileTransferRequestConsumer;
         this.logWriterMessageConsumer = logWriterMessageConsumer;
-    }
 
-    public void start(int port) throws IOException {
         eventsBus.addConsumer(serverEventsLogger);
         eventsBus.addConsumer(messagesHistoryLogger);
         eventsBus.addConsumer(serverEventsProcessor);
@@ -66,22 +64,32 @@ public class ChatServer {
         eventsBus.addConsumer(roomRequestEventConsumer);
         eventsBus.addConsumer(fileTransferRequestConsumer);
         eventsBus.addConsumer(logWriterMessageConsumer);
-
-        try (var serverSocket = new ServerSocket(port)) {
-            eventsBus.publish(ServerEvent.builder().type(SERVER_STARTED).build());
-            while (true) {
-                var socket = serverSocket.accept();
-                userJoinHandler.joinUser(socket);
-                eventsBus.publish(ServerEvent.builder().type(CONNECTION_ACCEPTED).build());
-            }
-        }
     }
+
+//    public void start(int port) throws IOException {
+//
+//
+//        try (var serverSocket = new ServerSocket(port)) {
+//            eventsBus.publish(ServerEvent.builder().type(SERVER_STARTED).build());
+//            while (true) {
+//                var socket = serverSocket.accept();
+//                userJoinHandler.joinUser(socket);
+//                eventsBus.publish(ServerEvent.builder().type(CONNECTION_ACCEPTED).build());
+//            }
+//        }
+//    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handlePostRequest(@Context UriInfo uriInfo) {
-        log.info("---------> Received input");
+    public Response handlePostRequest(UserMessageDto userMessageDto, @Context UriInfo uriInfo) {
+        log.info("---------> Received input {}, {}", userMessageDto.getPort(), userMessageDto.getUserName());
+
+        var worker = new Worker(userMessageDto.getPort(), userMessageDto.getUserName(), eventsBus);
+        serverWorkers.add(worker);
+        eventsBus.publish(ServerEvent.builder().type(USER_JOINED).payload(userMessageDto.getUserName()).build());
+
+        eventsBus.publish(ServerEvent.builder().type(CONNECTION_ACCEPTED).build());
         return Response.accepted().build();
     }
 }

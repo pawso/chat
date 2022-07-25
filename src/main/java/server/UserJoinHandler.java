@@ -36,28 +36,28 @@ public class UserJoinHandler {
 
     public void joinUser(Socket socket) {
 
-        var worker = new Worker(socket, eventsBus);
+        // var worker = new Worker(socket, eventsBus);
 
-        userExecutor.execute(worker);
+        // userExecutor.execute(worker);
 
-        joinerExecutor.submit(() -> {
-            CompletableFuture<String> name = worker.getName();
-
-            while(!name.isDone()) {
-                try {
-                    Thread.sleep(HANDSHAKE_WAIT_SLEEP_INTERVAL_MS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            synchronized (this) {
-                serverWorkers.add(worker);
-                try {
-                    eventsBus.publish(ServerEvent.builder().type(USER_JOINED).payload(name.get()).build());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+//        joinerExecutor.submit(() -> {
+//            CompletableFuture<String> name = worker.getName();
+//
+//            while(!name.isDone()) {
+//                try {
+//                    Thread.sleep(HANDSHAKE_WAIT_SLEEP_INTERVAL_MS);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            synchronized (this) {
+//                serverWorkers.add(worker);
+//                try {
+//                    eventsBus.publish(ServerEvent.builder().type(USER_JOINED).payload(name.get()).build());
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
     }
 }

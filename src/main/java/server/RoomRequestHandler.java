@@ -89,7 +89,7 @@ public class RoomRequestHandler {
         }
 
         if (room.getOwner() != source) {
-            source.sendText(String.format("Refused: this room is privately owned by %s", room.getOwner().getName().get()));
+            source.sendText(String.format("Refused: this room is privately owned by %s", room.getOwner().getName()));
             return;
         }
 
@@ -104,7 +104,7 @@ public class RoomRequestHandler {
             return;
         }
         room.addUser(member);
-        room.publishInfo(String.format("Added user %s", member.getName().get()));
+        room.publishInfo(String.format("Added user %s", member.getName()));
     }
 
     @SneakyThrows
@@ -117,15 +117,15 @@ public class RoomRequestHandler {
 
         Room room = rooms.getRoom(roomName);
         if (!room.getIsPublic() && room.getOwner() != source) {
-            source.sendText(String.format("Refused: this room is privately owned by %s", room.getOwner().getName().get()));
+            source.sendText(String.format("Refused: this room is privately owned by %s", room.getOwner().getName()));
             return;
         }
 
         if (room.containsMember(source)) {
-            source.sendText(String.format("Can't add user. User: %s already in room", room.getOwner().getName().get()));
+            source.sendText(String.format("Can't add user. User: %s already in room", room.getOwner().getName()));
             return;
         }
         room.addUser(source);
-        room.publishInfo(String.format("User joined: %s", source.getName().get()));
+        room.publishInfo(String.format("User joined: %s", source.getName()));
     }
 }

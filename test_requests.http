@@ -1,2 +1,20 @@
-POST http://localhost:8080/chatInput
+POST http://localhost:8080/joinUser
+Content-Type: application/json
+Accept: application/json
+
+{
+  "port" : 1,
+  "userName": "Jan"
+}
+
+###
+
+POST http://localhost:8080/message
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name" : "Jan",
+  "message": "I am Jan"
+}
 
