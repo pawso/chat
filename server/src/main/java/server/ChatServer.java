@@ -10,14 +10,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import io.quarkus.runtime.Quarkus;
+import io.quarkus.runtime.QuarkusApplication;
+import io.quarkus.runtime.annotations.QuarkusMain;
 import lombok.extern.slf4j.Slf4j;
 
 import static server.ServerEventType.*;
 
 @Slf4j
-@Path("/joinUser")
-// @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ChatServer {
+public class ChatServer implements QuarkusApplication {
      private final ServerWorkers serverWorkers;
      private final EventsBus eventsBus;
      private final UserJoinHandler userJoinHandler;
@@ -51,7 +52,10 @@ public class ChatServer {
         this.roomRequestEventConsumer = roomRequestEventConsumer;
         this.fileTransferRequestConsumer = fileTransferRequestConsumer;
         this.logWriterMessageConsumer = logWriterMessageConsumer;
+    }
 
+    @Override
+    public int run(String... args) throws Exception {
         eventsBus.addConsumer(serverEventsLogger);
         eventsBus.addConsumer(messagesHistoryLogger);
         eventsBus.addConsumer(serverEventsProcessor);
@@ -59,32 +63,9 @@ public class ChatServer {
         eventsBus.addConsumer(roomRequestEventConsumer);
         eventsBus.addConsumer(fileTransferRequestConsumer);
         eventsBus.addConsumer(logWriterMessageConsumer);
+
+        Quarkus.waitForExit();
+        return 0;
     }
 
-//    public void start(int port) throws IOException {
-//
-//
-//        try (var serverSocket = new ServerSocket(port)) {
-//            eventsBus.publish(ServerEvent.builder().type(SERVER_STARTED).build());
-//            while (true) {
-//                var socket = serverSocket.accept();
-//                userJoinHandler.joinUser(socket);
-//                eventsBus.publish(ServerEvent.builder().type(CONNECTION_ACCEPTED).build());
-//            }
-//        }
-//    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response handlePostRequest(UserMessageDto userMessageDto, @Context UriInfo uriInfo) {
-        log.info("---------> Received input {}, {}", userMessageDto.getPort(), userMessageDto.getUserName());
-
-        var worker = new Worker(userMessageDto.getPort(), userMessageDto.getUserName(), eventsBus);
-        serverWorkers.add(worker);
-        eventsBus.publish(ServerEvent.builder().type(USER_JOINED).payload(userMessageDto.getUserName()).build());
-
-        eventsBus.publish(ServerEvent.builder().type(CONNECTION_ACCEPTED).build());
-        return Response.accepted().build();
-    }
 }

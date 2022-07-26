@@ -19,6 +19,7 @@ public class TextReader {
     public TextReader(InputStream inputStream, Consumer<String> textConsumer) {
         this.textConsumer = textConsumer;
         reader = new BufferedReader(new InputStreamReader(inputStream));
+
     }
 
     public TextReader(Socket socket, Consumer<String> textConsumer, Runnable onClose) {
@@ -35,6 +36,7 @@ public class TextReader {
         String text;
         try {
             while ((text = reader.readLine()) != null) {
+                System.out.println(text);
                 textConsumer.accept(text);
             }
         } catch (IOException exception) {

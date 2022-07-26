@@ -18,3 +18,14 @@ Accept: application/json
   "message": "I am Jan"
 }
 
+###
+
+POST http://localhost:9000/handleFile
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name" : "Jan",
+  "message": "I am Jan"
+}
+

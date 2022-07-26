@@ -3,11 +3,12 @@ package server;
 // import jakarta.enterprise.inject.Default;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
 @HashMapWorkers
-@Dependent
+@Singleton
 class HashMapServerWorkers implements ServerWorkers {
 
     private final Map<String, Worker> workers = new HashMap<>();
@@ -19,9 +20,7 @@ class HashMapServerWorkers implements ServerWorkers {
 
     @Override
     public void remove(Worker worker) {
-
-            workers.remove(worker.getName());
-
+        workers.remove(worker.getName());
     }
 
     @Override
