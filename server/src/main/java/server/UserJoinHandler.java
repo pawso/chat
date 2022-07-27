@@ -35,7 +35,6 @@ public class UserJoinHandler {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response handlePostRequest(UserMessageDto userMessageDto, @Context UriInfo uriInfo) {
-        log.info("---------> Received input {}, {}", userMessageDto.getPort(), userMessageDto.getUserName());
 
         var worker = new Worker(userMessageDto.getPort(), userMessageDto.getUserName(), eventsBus);
         serverWorkers.add(worker);
@@ -45,31 +44,4 @@ public class UserJoinHandler {
 
         return Response.accepted().build();
     }
-
-//    public void joinUser(Socket socket) {
-//
-//        // var worker = new Worker(socket, eventsBus);
-//
-//        // userExecutor.execute(worker);
-//
-////        joinerExecutor.submit(() -> {
-////            CompletableFuture<String> name = worker.getName();
-////
-////            while(!name.isDone()) {
-////                try {
-////                    Thread.sleep(HANDSHAKE_WAIT_SLEEP_INTERVAL_MS);
-////                } catch (InterruptedException e) {
-////                    e.printStackTrace();
-////                }
-////            }
-////            synchronized (this) {
-////                serverWorkers.add(worker);
-////                try {
-////                    eventsBus.publish(ServerEvent.builder().type(USER_JOINED).payload(name.get()).build());
-////                } catch (Exception e) {
-////                    throw new RuntimeException(e);
-////                }
-////            }
-////        });
-//    }
 }

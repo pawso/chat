@@ -31,11 +31,6 @@ public class Room {
                 .type(LOG_WRITE_MESSAGE)
                 .payload(text)
                 .build());
-
-        /* eventsBus.publish(ServerEvent.builder()
-                .type(MESSAGE_RECEIVED)
-                .payload(text)
-                .build()); */
     }
 
     public void publishInfo(String message) {

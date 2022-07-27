@@ -1,6 +1,5 @@
 package server;
 
-
 import commons.CommandUtils;
 import lombok.extern.java.Log;
 

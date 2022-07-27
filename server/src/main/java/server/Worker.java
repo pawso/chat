@@ -3,8 +3,6 @@ package server;
 import com.google.gson.Gson;
 import commons.CommandUtils;
 import lombok.SneakyThrows;
-import commons.TextReader;
-import commons.TextWriter;
 import lombok.extern.java.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -16,27 +14,18 @@ import server.dto.MessageDto;
 import static server.ServerEventType.*;
 
 @Log
-class Worker /* implements Runnable */ {
+class Worker {
 
-    // private final Socket socket;
     private final EventsBus eventsBus;
-    // private final TextWriter writer;
     private String name;
 
     int port;
 
     Worker(int port, String name, EventsBus eventsBus) {
-        // this.socket = socket;
         this.eventsBus = eventsBus;
-        // writer = new TextWriter(socket);
         this.name = name;
         this.port = port;
     }
-
-    // @Override
-    /* public void run() {
-        new TextReader(socket, this::onText, this::onInputClose).read();
-    } */
 
     public String getName() {
         return name;

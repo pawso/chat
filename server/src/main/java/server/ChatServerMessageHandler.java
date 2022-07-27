@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import server.dto.MessageDto;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,10 +18,15 @@ import static server.ServerEventType.*;
 
 @Slf4j
 @Path("/message")
-@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ChatServerMessageHandler {
 
     private final EventsBus eventsBus;
+    private final ServerWorkers serverWorkers;
+
+    public ChatServerMessageHandler(EventsBus eventsBus, @SynchronizedWorkers ServerWorkers serverWorkers) {
+        this.eventsBus = eventsBus;
+        this.serverWorkers = serverWorkers;
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -37,20 +41,21 @@ public class ChatServerMessageHandler {
         if (CommandUtils.isCommand(message)) {
             eventType = SPECIAL_MESSAGE_RECEIVED;
         } else {
-            publishMessage(name + ": " + message);
-
+            publishMessage(name, name + ": " + message);
             eventType = LOG_WRITE_MESSAGE;
         }
         eventsBus.publish(ServerEvent.builder()
                 .type(eventType)
                 .payload(message)
+                .source(serverWorkers.get(name))
                 .build());
     }
 
-    private void publishMessage(String text) {
+    private void publishMessage(String name, String text) {
         eventsBus.publish(ServerEvent.builder()
                 .type(MESSAGE_RECEIVED)
                 .payload(text)
+                .source(serverWorkers.get(name))
                 .build());
     }
 }

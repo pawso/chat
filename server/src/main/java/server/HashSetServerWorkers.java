@@ -35,11 +35,6 @@ class HashSetServerWorkers implements ServerWorkers {
         return null;
     }
 
-    /* @Override
-    public void broadcastData(byte[] data, FileBroadcaster fileBroadcaster) {
-        fileBroadcaster.broadcast(data, this);
-    } */
-
     @Override
     public Integer count() {
         return workers.size();
