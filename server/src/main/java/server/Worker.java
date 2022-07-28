@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import commons.CommandUtils;
+import commons.DtoFileTransferReceive;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.http.HttpResponse;
@@ -83,6 +84,18 @@ class Worker {
         HttpClient httpClient    = HttpClientBuilder.create().build();
         HttpPost post          = new HttpPost(endpoint);
         StringEntity postingString = new StringEntity(gson.toJson(MessageDto.builder().userName(name).message(text).build()));
+        post.setEntity(postingString);
+        post.setHeader("Content-type", "application/json");
+        HttpResponse response = httpClient.execute(post);
+    }
+
+    @SneakyThrows
+    void sendFile(String fileName, byte[] data) {
+        Gson gson = new Gson();
+        String endpoint = String.format("http://localhost:%d/receiveFile", port);
+        HttpClient httpClient    = HttpClientBuilder.create().build();
+        HttpPost post          = new HttpPost(endpoint);
+        StringEntity postingString = new StringEntity(gson.toJson(DtoFileTransferReceive.builder().fileName(fileName).data(data).build()));
         post.setEntity(postingString);
         post.setHeader("Content-type", "application/json");
         HttpResponse response = httpClient.execute(post);

@@ -31,6 +31,11 @@ class HashSetServerWorkers implements ServerWorkers {
     }
 
     @Override
+    public void broadcastFile(String fileName, byte[] data) {
+        workers.forEach(worker -> worker.sendFile(fileName, data));
+    }
+
+    @Override
     public Worker get(String name) {
         return null;
     }

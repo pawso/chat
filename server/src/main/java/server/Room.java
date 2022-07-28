@@ -1,8 +1,15 @@
 package server;
 
+import com.google.gson.Gson;
 import commons.FileBroadcasterFactory;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import server.dto.MessageDto;
 
 import static server.ServerEventType.LOG_WRITE_MESSAGE;
 
@@ -38,12 +45,14 @@ public class Room {
     }
 
     public void publishFile(byte[] data, String fileName) {
-        var fileBroadcaster = FileBroadcasterFactory.createAsynchronousFileBroadcaster(data, members.count());
-        fileBroadcaster.broadcast();
-        members.broadcast(String.format("event:ACCEPT_FILE %d %s", fileBroadcaster.getPort(), fileName));
+        members.broadcastFile(fileName, data);
     }
 
     public Boolean containsMember(Worker worker) {
         return members.contains(worker);
+    }
+
+    public Boolean containsMember(String name) {
+        return members.get(name) != null;
     }
 }

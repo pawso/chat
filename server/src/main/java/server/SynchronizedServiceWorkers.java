@@ -45,6 +45,13 @@ class SynchronizedServiceWorkers implements ServerWorkers {
     }
 
     @Override
+    public void broadcastFile(String fileName, byte[] data) {
+        lock.readLock().lock();
+        serverWorkers.broadcastFile(fileName, data);
+        lock.readLock().unlock();
+    }
+
+    @Override
     public Integer count() {
         lock.readLock().lock();
         Integer count = serverWorkers.count();

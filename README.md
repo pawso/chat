@@ -2,7 +2,17 @@
 
 Chat application supports sending messages to public room as well as special commands in form: event:<command> <args>
 
-Supported functionalities are: 
+Supported functionalities are:
+
+##PROJECT 1B
+
+Thing do complete:
+CDI - DONE
+JavaRX - DONE
+Messaging instead of events 
+
+
+##PROJECT 1A
 
 ####MAIN CHAT:
 

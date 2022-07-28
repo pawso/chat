@@ -31,6 +31,11 @@ class HashMapServerWorkers implements ServerWorkers {
     }
 
     @Override
+    public void broadcastFile(String fileName, byte[] data) {
+        workers.forEach((name, worker) -> worker.sendFile(fileName, data));
+    }
+
+    @Override
     public Worker get(String name) {
         return workers.get(name);
     }

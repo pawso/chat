@@ -1,5 +1,7 @@
 package server;
 
+import commons.DtoFileTransferReceive;
+
 interface ServerWorkers {
 
     void add(Worker worker);
@@ -9,6 +11,8 @@ interface ServerWorkers {
     Boolean contains(Worker worker);
 
     void broadcast(String text);
+
+    void broadcastFile(String fileName, byte[] data);
 
     Worker get(String name);
 
