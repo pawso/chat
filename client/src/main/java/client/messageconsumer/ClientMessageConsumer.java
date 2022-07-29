@@ -26,12 +26,12 @@ public class ClientMessageConsumer implements Consumer<String> {
     public void accept(String text) {
         if (text.isBlank()) {
             return;
-        } else if (text.contains("event:ACCEPT_FILE")) {
-            String notificationMessage = fileTransferHandler.onIncomingFile(text);
-            loggerConsumer.accept(notificationMessage);
+       //  } else if (text.contains("event:ACCEPT_FILE")) {
+//            String notificationMessage = fileTransferHandler.onIncomingFile(text);
+//            loggerConsumer.accept(notificationMessage);
         } else if (text.contains("event:SEND_FILE")) {
-            String notificationMessage = fileTransferHandler.onOutcomingFile(text);
-            writerConsumer.accept(notificationMessage);
+            fileTransferHandler.onOutcomingFile(text);
+            // writerConsumer.accept(notificationMessage);
         }
     }
 }

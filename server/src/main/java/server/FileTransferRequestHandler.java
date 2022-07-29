@@ -1,6 +1,5 @@
 package server;
 
-import commons.Sockets;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
@@ -12,8 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import lombok.SneakyThrows;
-import server.dto.FileTransferDto;
+import commons.FileTransferDto;
 
 @Singleton
 @Path("/broadcastFile")

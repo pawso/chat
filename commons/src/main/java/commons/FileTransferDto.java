@@ -1,4 +1,4 @@
-package server.dto;
+package commons;
 
 import lombok.Builder;
 import lombok.Data;

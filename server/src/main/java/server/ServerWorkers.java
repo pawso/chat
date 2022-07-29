@@ -1,6 +1,6 @@
 package server;
 
-import commons.DtoFileTransferReceive;
+import commons.FileTransferReceiveDto;
 
 interface ServerWorkers {
 
