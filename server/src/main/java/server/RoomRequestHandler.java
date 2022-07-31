@@ -3,22 +3,22 @@ package server;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.vertx.core.eventbus.EventBus;
 import lombok.SneakyThrows;
 
 import static server.ServerEventType.*;
 
-
 @Singleton
 public class RoomRequestHandler {
     private final RoomsMapCollection rooms;
-    private final EventsBus eventsBus;
+    private final EventBus eventBus;
 
     private final ServerWorkers workers;
 
     @Inject
-    public RoomRequestHandler(RoomsMapCollection rooms, EventsBus eventsBus, @SynchronizedWorkers ServerWorkers workers) {
+    public RoomRequestHandler(RoomsMapCollection rooms, EventBus eventBus, @SynchronizedWorkers ServerWorkers workers) {
         this.rooms = rooms;
-        this.eventsBus = eventsBus;
+        this.eventBus = eventBus;
         this.workers = workers;
     }
 
@@ -28,11 +28,13 @@ public class RoomRequestHandler {
             source.sendText(String.format("Room %s already exists", roomName));
             return;
         }
-        Room room = new Room(roomName, source, isPublic, eventsBus, new HashSetServerWorkers());
+        Room room = new Room(roomName, source, isPublic, eventBus, new HashSetServerWorkers());
         room.addUser(source);
         rooms.addRoom(roomName, room);
 
-        eventsBus.publish(ServerEvent.builder().type(isPublic ? PUBLIC_ROOM_OPENED : PRIVATE_ROOM_OPENED).payload(roomName).build());
+        eventBus.publish(
+                "ServerEvent",
+                ServerEvent.builder().type(isPublic ? PUBLIC_ROOM_OPENED : PRIVATE_ROOM_OPENED).payload(roomName).build());
     }
 
     void closeRoom(String payload, Worker source) {

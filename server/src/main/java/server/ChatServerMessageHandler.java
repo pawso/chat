@@ -1,10 +1,11 @@
 package server;
 
 import commons.CommandUtils;
-import lombok.RequiredArgsConstructor;
+import io.vertx.core.eventbus.EventBus;
 import lombok.extern.slf4j.Slf4j;
 import server.dto.MessageDto;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,11 +21,13 @@ import static server.ServerEventType.*;
 @Path("/message")
 public class ChatServerMessageHandler {
 
-    private final EventsBus eventsBus;
+    private final EventBus eventBus;
+
     private final ServerWorkers serverWorkers;
 
-    public ChatServerMessageHandler(EventsBus eventsBus, @SynchronizedWorkers ServerWorkers serverWorkers) {
-        this.eventsBus = eventsBus;
+    @Inject
+    public ChatServerMessageHandler(EventBus eventBus, @SynchronizedWorkers ServerWorkers serverWorkers) {
+        this.eventBus = eventBus;
         this.serverWorkers = serverWorkers;
     }
 
@@ -44,7 +47,7 @@ public class ChatServerMessageHandler {
             publishMessage(name, name + ": " + message);
             eventType = LOG_WRITE_MESSAGE;
         }
-        eventsBus.publish(ServerEvent.builder()
+        eventBus.publish("ServerEvent", ServerEvent.builder()
                 .type(eventType)
                 .payload(message)
                 .source(serverWorkers.get(name))
@@ -52,7 +55,7 @@ public class ChatServerMessageHandler {
     }
 
     private void publishMessage(String name, String text) {
-        eventsBus.publish(ServerEvent.builder()
+        eventBus.publish("ServerEvent", ServerEvent.builder()
                 .type(MESSAGE_RECEIVED)
                 .payload(text)
                 .source(serverWorkers.get(name))

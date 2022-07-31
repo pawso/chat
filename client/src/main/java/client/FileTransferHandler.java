@@ -26,7 +26,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Log
-@QuarkusMain
 @Slf4j
 @javax.ws.rs.Path("/receiveFile")
 public class FileTransferHandler {

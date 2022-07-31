@@ -1,6 +1,8 @@
 package server;
 
 import commons.CommandUtils;
+import io.quarkus.vertx.ConsumeEvent;
+import io.vertx.core.eventbus.EventBus;
 import lombok.extern.java.Log;
 
 import javax.inject.Inject;
@@ -13,12 +15,12 @@ import static server.ServerEventType.*;
 
 @Log
 @Singleton
-public class SpecialMessageDispatcher implements Consumer<ServerEvent> {
-    private final EventsBus eventsBus;
+public class SpecialMessageDispatcher {
+    private final EventBus eventBus;
 
     @Inject
-    public SpecialMessageDispatcher(EventsBus eventsBus) {
-        this.eventsBus = eventsBus;
+    public SpecialMessageDispatcher(EventBus eventBus) {
+        this.eventBus = eventBus;
     }
 
     private static final List<String> HANDLED_COMMANDS = Arrays.asList(
@@ -34,7 +36,7 @@ public class SpecialMessageDispatcher implements Consumer<ServerEvent> {
             "READ_HISTORY"
     );
 
-    @Override
+    @ConsumeEvent("ServerEvent")
     public void accept(ServerEvent event) {
         switch (event.getType()) {
             case SPECIAL_MESSAGE_RECEIVED -> dispatchMessage(event.getPayload(), event.getSource());
@@ -44,7 +46,7 @@ public class SpecialMessageDispatcher implements Consumer<ServerEvent> {
     private void dispatchMessage(String message, Worker sender) {
 
         if (!HANDLED_COMMANDS.contains(CommandUtils.getCommandFromEvent(message))) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(SPECIAL_MESSAGE_RECEIVED_UNHANDLED)
                     .payload(message)
                     .build());
@@ -57,62 +59,62 @@ public class SpecialMessageDispatcher implements Consumer<ServerEvent> {
             var name = arguments;
             sender.setName(name);
         } else if (message.contains("OPEN_PUBLIC_ROOM")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(PUBLIC_ROOM_OPEN_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());
         } else if (message.contains("OPEN_PRIVATE_ROOM")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(PRIVATE_ROOM_OPEN_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());
         } else if (message.contains("PUBLISH_TO_ROOM")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(PUBLISH_TO_ROOM_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());
         } else if (message.contains("JOIN_ROOM")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(JOIN_ROOM_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());
         } else if (message.contains("ADD_USER_TO_ROOM")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(ADD_USER_TO_ROOM_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());
         } else if (message.contains("CLOSE_ROOM")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(CLOSE_ROOM_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());
         } else if (message.contains("READ_HISTORY")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(READ_HISTORY_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());
         } else if (message.contains("SEND_FILE")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(SEND_FILE_REQUEST)
                     .source(sender)
                     .payload(arguments)
                     .build());
         } else if (message.contains("ACCEPT_FILE")) {
-            eventsBus.publish(ServerEvent.builder()
+            eventBus.publish("ServerEvent", ServerEvent.builder()
                     .type(ACCEPT_FILE)
                     .source(sender)
                     .payload(arguments)
                     .build());
         }
 
-        eventsBus.publish(ServerEvent.builder()
+        eventBus.publish("ServerEvent", ServerEvent.builder()
                 .type(SPECIAL_MESSAGE_RECEIVED_HANDLED)
                 .payload(message)
                 .build());

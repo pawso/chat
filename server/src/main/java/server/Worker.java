@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import commons.CommandUtils;
 import commons.FileTransferReceiveDto;
+import io.vertx.core.eventbus.EventBus;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.http.HttpResponse;
@@ -17,13 +18,13 @@ import static server.ServerEventType.*;
 @Log
 class Worker {
 
-    private final EventsBus eventsBus;
+    private final EventBus eventBus;
     private String name;
 
     int port;
 
-    Worker(int port, String name, EventsBus eventsBus) {
-        this.eventsBus = eventsBus;
+    Worker(int port, String name, EventBus eventBus) {
+        this.eventBus = eventBus;
         this.name = name;
         this.port = port;
     }
@@ -48,7 +49,7 @@ class Worker {
             publishMessage(name + ": " + text);
             eventType = LOG_WRITE_MESSAGE;
         }
-        eventsBus.publish(ServerEvent.builder()
+        eventBus.publish("ServerEvent", ServerEvent.builder()
                 .type(eventType)
                 .payload(text)
                 .source(this)
@@ -56,7 +57,7 @@ class Worker {
     }
 
     private void publishMessage(String text) {
-        eventsBus.publish(ServerEvent.builder()
+        eventBus.publish("ServerEvent", ServerEvent.builder()
                 .type(MESSAGE_RECEIVED)
                 .payload(text)
                 .source(this)
@@ -65,13 +66,13 @@ class Worker {
 
     @SneakyThrows
     private void onInputClose() {
-        eventsBus.publish(ServerEvent.builder()
+        eventBus.publish("ServerEvent", ServerEvent.builder()
                 .type(USER_LEFT_CHAT)
                 .payload(name)
                 .source(this)
                 .build());
 
-        eventsBus.publish(ServerEvent.builder()
+        eventBus.publish("ServerEvent", ServerEvent.builder()
                 .type(CONNECTION_CLOSED)
                 .source(this)
                 .build());

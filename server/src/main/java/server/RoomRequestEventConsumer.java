@@ -1,12 +1,14 @@
 package server;
 
+import io.quarkus.vertx.ConsumeEvent;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import java.util.function.Consumer;
 
 @Singleton
-public class RoomRequestEventConsumer implements Consumer<ServerEvent> {
+public class RoomRequestEventConsumer {
 
     private final RoomRequestHandler requestHandler;
 
@@ -15,7 +17,7 @@ public class RoomRequestEventConsumer implements Consumer<ServerEvent> {
         this.requestHandler = requestHandler;
     }
 
-    @Override
+    @ConsumeEvent("ServerEvent")
     public void accept(ServerEvent event) {
         switch (event.getType()) {
             case PUBLIC_ROOM_OPEN_REQUEST -> requestHandler.openRoom(event.getPayload(), event.getSource(), true);

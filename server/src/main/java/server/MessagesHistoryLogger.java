@@ -1,5 +1,6 @@
 package server;
 
+import io.quarkus.vertx.ConsumeEvent;
 import lombok.extern.java.Log;
 
 import javax.inject.Singleton;
@@ -8,9 +9,9 @@ import static server.ServerEventType.MESSAGE_RECEIVED;
 
 @Log
 @Singleton
-class MessagesHistoryLogger implements Consumer<ServerEvent> {
+class MessagesHistoryLogger {
 
-    @Override
+    @ConsumeEvent("ServerEvent")
     public void accept(ServerEvent event) {
         if (event.getType().equals(MESSAGE_RECEIVED)) {
             log.info("New message: " + event.getPayload());

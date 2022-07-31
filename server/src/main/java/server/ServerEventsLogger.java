@@ -1,5 +1,6 @@
 package server;
 
+import io.quarkus.vertx.ConsumeEvent;
 import lombok.extern.java.Log;
 
 import javax.inject.Singleton;
@@ -7,9 +8,9 @@ import java.util.function.Consumer;
 
 @Log
 @Singleton
-class ServerEventsLogger implements Consumer<ServerEvent> {
+class ServerEventsLogger {
 
-    @Override
+    @ConsumeEvent("ServerEvent")
     public void accept(ServerEvent event) {
         switch (event.getType()) {
             case SERVER_STARTED -> log.info("Server started.");

@@ -1,12 +1,14 @@
 package server;
 
+import io.quarkus.vertx.ConsumeEvent;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import java.util.function.Consumer;
 
 @Singleton
-public class LogWriteMessageConsumer implements Consumer<ServerEvent> {
+public class LogWriteMessageConsumer {
 
     private final LogFileWriter logFileWriter;
     private final RoomsMapCollection rooms;
@@ -17,7 +19,7 @@ public class LogWriteMessageConsumer implements Consumer<ServerEvent> {
         this.rooms = rooms;
     }
 
-    @Override
+    @ConsumeEvent("ServerEvent")
     public void accept(ServerEvent event) {
         switch (event.getType()) {
             case LOG_WRITE_MESSAGE -> logFileWriter.write(event.getPayload());

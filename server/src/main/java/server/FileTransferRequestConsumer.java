@@ -1,12 +1,14 @@
 package server;
 
+import io.quarkus.vertx.ConsumeEvent;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import java.util.function.Consumer;
 
 @Singleton
-public class FileTransferRequestConsumer implements Consumer<ServerEvent> {
+public class FileTransferRequestConsumer {
 
     private final FileTransferRequestHandler requestHandler;
 
@@ -15,7 +17,7 @@ public class FileTransferRequestConsumer implements Consumer<ServerEvent> {
         this.requestHandler = requestHandler;
     }
 
-    @Override
+    @ConsumeEvent("ServerEvent")
     public void accept(ServerEvent event) {
         switch (event.getType()) {
             case SEND_FILE_REQUEST -> requestHandler.handleFileTransferRequest(event.getPayload(), event.getSource());

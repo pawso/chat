@@ -1,15 +1,8 @@
 package server;
 
-import com.google.gson.Gson;
-import commons.FileBroadcasterFactory;
+import io.vertx.core.eventbus.EventBus;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import server.dto.MessageDto;
 
 import static server.ServerEventType.LOG_WRITE_MESSAGE;
 
@@ -23,7 +16,7 @@ public class Room {
 
     private final Boolean isPublic;
 
-    private final EventsBus eventsBus;
+    private final EventBus eventBus;
 
     private final ServerWorkers members;
 
@@ -34,7 +27,7 @@ public class Room {
     public void publishMessage(String message, Worker sender) {
         String text = String.format("[%s] %s says: %s", roomName, sender.getName(), message);
         members.broadcast(text);
-        eventsBus.publish(ServerEvent.builder()
+        eventBus.publish("ServerEvent", ServerEvent.builder()
                 .type(LOG_WRITE_MESSAGE)
                 .payload(text)
                 .build());

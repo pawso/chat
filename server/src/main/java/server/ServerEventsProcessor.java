@@ -1,12 +1,16 @@
 package server;
 
+import io.quarkus.vertx.ConsumeEvent;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import java.util.function.Consumer;
 
 @Singleton
-public class ServerEventsProcessor implements Consumer<ServerEvent> {
+@Slf4j
+public class ServerEventsProcessor {
 
     private final ServerWorkers serverWorkers;
 
@@ -15,7 +19,7 @@ public class ServerEventsProcessor implements Consumer<ServerEvent> {
         this.serverWorkers = serverWorkers;
     }
 
-    @Override
+    @ConsumeEvent("ServerEvent")
     public void accept(ServerEvent event) {
         switch (event.getType()) {
             case MESSAGE_RECEIVED -> serverWorkers.broadcast(event.getPayload());
