@@ -9,7 +9,7 @@ Supported functionalities are:
 Thing do complete:
 CDI - DONE
 JavaRX - DONE
-Messaging instead of events 
+Messaging instead of events - DONE
 
 
 ##PROJECT 1A
